@@ -1,0 +1,27 @@
+{
+	"room_number": 1,
+	"sgh_address": "192.168.0.30",
+	"sgh_port": 3001,
+	"pic_address": "192.168.0.201",
+	"tv_remote_code": 1,
+	"lights": [
+		{
+			"type": "dimmer"
+		},
+		{
+			"type": "dimmer"
+		},
+		{
+			"type": "on_off"
+		},
+		{
+			"type": "on_off"
+		},
+		{
+			"type": "on_off"
+		},
+		{
+			"type": "on_off"
+		}
+	]
+}
