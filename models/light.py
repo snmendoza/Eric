@@ -1,4 +1,4 @@
-class Light:
+class Light(object):
 
     TYPE_DIMMER = 'dimmer'
     TYPE_ON_OFF = 'on_off'
