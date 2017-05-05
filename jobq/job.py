@@ -9,3 +9,6 @@ class Job(object):
         self.period = kwargs.get('period', 0)
         if self.retry or self.periodic:
             self.single_instance = True
+
+    def run(self):
+        return self.task()
