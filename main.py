@@ -2,6 +2,7 @@ import json
 import kivy
 from kivy.app import App
 from kivy.config import Config
+from kivy.logger import Logger
 from models.light import Light
 
 kivy.require('1.9.1')
@@ -13,6 +14,7 @@ class EricApp(App):
         self.read_config()
 
     def read_config(self):
+        Logger.info(__name__ + ': Reading config file')
         with open('config.json') as config_file:
             config = json.load(config_file)
             self.room_number = config['room_number']
@@ -25,5 +27,6 @@ class EricApp(App):
                 self.lights.append(Light(light['type']))
 
 if __name__ == '__main__':
+    Logger.info(__name__ + ': Running app')
     Config.set('graphics', 'fullscreen', 'auto')
     EricApp().run()

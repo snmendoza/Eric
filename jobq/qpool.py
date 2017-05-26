@@ -1,3 +1,4 @@
+from kivy.logger import Logger
 from q import Q
 import thread
 from threading import Lock
@@ -21,10 +22,13 @@ class QPool(object):
             thread.start_new_thread(self.runQ, (q,))
 
     def runQ(self, q):
+        Logger.info(__name__ + ': Running Q: ' + q.tag)
         q.run()
+        Logger.info(__name__ + ': Removing Q: ' + q.tag)
         self.qs.remove(q)
 
     def cancelJobs(self, tag):
+        Logger.info(__name__ + ': Canceling jobs: ' + tag)
         for q in self.qs:
             if q.tag == tag:
                 q.cancel()
