@@ -1,24 +1,31 @@
-from ..commands.basecommands import BaseCommand
+from commands.basecommands import BaseCommand
 from kivy.logger import Logger
 import socket
+from threading import Timer
 
 
 class BaseConnection(object):
 
-    TIMEOUT_SECOUNDS = 5
+    TIMEOUT = 5  # seconds
+    KEEPALIVE_INTERVAL = 5  # seconds
 
-    def connect(self, address, port, command_len):
+    def __init__(self, address, port, command_len):
         self.address = address
         self.port = port
         self.command_len = command_len
         self.command = []
+        self.keepalive_timer = Timer(
+            self.KEEPALIVE_INTERVAL, lambda: self.send_keepalive())
+
+    def connect(self):
         self.disconnect()
         Logger.info(__name__ + ': Connecting to ' +
                     self.address + ':' + self.port)
         try:
             self.socket = socket.socket()
-            self.socket.settimeout(self.TIMEOUT_SECOUNDS)
-            self.socket.connect((address, port))
+            self.socket.settimeout(self.TIMEOUT)
+            self.socket.connect((self.address, self.port))
+            self.keepalive_timer.start()
             while True:
                 data = self.socket.recv(1024)
                 if not data:
@@ -36,17 +43,20 @@ class BaseConnection(object):
         if (self.socket):
             Logger.info(__name__ + ': Disconnecting from ' +
                         self.address + ':' + self.port)
+            self.keepalive_timer.cancel()
             self.socket.shutdown()
             self.socket.close()
         self.socket = None
 
     def send_command(self, command):
         success = False
+        self.keepalive_timer.cancel()
         if (self.socket):
             Logger.debug(__name__ + ': Sending ' + command + ' to ' +
                          self.address + ':' + self.port)
             try:
                 self.socket.send(command)
+                self.keepalive_timer.start()
                 success = True
             except socket.error as msg:
                 Logger.warning(__name__ + ': Sending ' + command + ' to ' +
@@ -62,3 +72,9 @@ class BaseConnection(object):
                 self.read_command()
             elif len(self.command) > self.command_len:
                 self.command = []
+
+    def read_command(self):
+        raise NotImplementedError
+
+    def send_keepalive(self):
+        raise NotImplementedError
