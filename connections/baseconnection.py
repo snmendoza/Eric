@@ -74,8 +74,7 @@ class BaseConnection(object):
                 self.command = []
 
     def read_command(self):
-        Logger.debug(__name__ + ': Received ' + self.command + ' from ' +
-                     self.address + ':' + self.port)
+        raise NotImplementedError
 
     def send_keepalive(self):
         self.send_command(self.get_keepalive_command())
