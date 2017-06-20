@@ -14,8 +14,17 @@ class BaseConnection(object):
         self.port = port
         self.command_len = command_len
         self.command = []
-        self.keepalive_timer = Timer(
-            self.KEEPALIVE_INTERVAL, lambda: self.send_keepalive())
+        self.keepalive_timer = None
+
+    def start_keepalive_timer(self):
+        if not self.keepalive_timer:
+            self.keepalive_timer = Timer(
+                self.KEEPALIVE_INTERVAL, lambda: self.send_keepalive())
+            self.keepalive_timer.start()
+
+    def cancel_keepalive_timer(self):
+        if self.keepalive_timer:
+            self.keepalive_timer.cancel()
 
     def connect(self):
         self.disconnect()
@@ -25,7 +34,7 @@ class BaseConnection(object):
             self.socket = socket.socket()
             self.socket.settimeout(self.TIMEOUT)
             self.socket.connect((self.address, self.port))
-            self.keepalive_timer.start()
+            self.start_keepalive_timer()
             while True:
                 data = self.socket.recv(1024)
                 if not data:
@@ -43,20 +52,20 @@ class BaseConnection(object):
         if (self.socket):
             Logger.info(__name__ + ': Disconnecting from ' +
                         self.address + ':' + self.port)
-            self.keepalive_timer.cancel()
+            self.cancel_keepalive_timer()
             self.socket.shutdown()
             self.socket.close()
         self.socket = None
 
     def send_command(self, command):
         success = False
-        self.keepalive_timer.cancel()
+        self.cancel_keepalive_timer()
         if (self.socket):
             Logger.debug(__name__ + ': Sending ' + command + ' to ' +
                          self.address + ':' + self.port)
             try:
                 self.socket.send(command)
-                self.keepalive_timer.start()
+                self.start_keepalive_timer()
                 success = True
             except socket.error as msg:
                 Logger.warning(__name__ + ': Sending ' + command + ' to ' +
@@ -78,7 +87,7 @@ class BaseConnection(object):
 
     def send_keepalive(self):
         self.send_command(self.get_keepalive_command())
-        self.keepalive_timer.start()
+        self.start_keepalive_timer()
 
     def get_keepalive_command(self):
         raise NotImplementedError

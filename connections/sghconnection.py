@@ -13,8 +13,17 @@ class SGHConnection(BaseConnection):
         command_len = len(BaseCommand.START) + SGHCommand.NODE_LEN \
             + len(BaseCommand.END)
         super(SGHConnection, self).__init__(address, port, command_len)
-        self.ack_timer = Timer(
-            self.ACK_MAX_DELAY, self.disconnect_on_failed_ack)
+        self.ack_timer = None
+
+    def start_ack_timer(self):
+        if not self.ack_timer:
+            self.ack_timer = Timer(
+                self.ACK_MAX_DELAY, self.disconnect_on_failed_ack)
+            self.ack_timer.start()
+
+    def cancel_ack_timer(self):
+        if self.ack_timer:
+            self.ack_timer.cancel()
 
     def get_keepalive_command(self):
         # This app should be running on a plugged device always.
@@ -25,14 +34,17 @@ class SGHConnection(BaseConnection):
 
     def send_command(self, command):
         if super(SGHConnection, self).send_command(command):
-            self.ack_timer.start()
+            self.start_ack_timer()
+            return True
+        else:
+            return False
 
     def disconnect_on_failed_ack(self):
         Logger.warning(__name__ + ': ACK not received')
         self.disconnect()
 
     def disconnect(self):
-        self.ack_timer.cancel()
+        self.cancel_ack_timer()
         super(SGHConnection, self).disconnect()
 
     def read_command(self):
@@ -44,4 +56,4 @@ class SGHConnection(BaseConnection):
 
     def read_ack(self):
         Logger.debug(__name__ + ': Received ACK')
-        self.ack_timer.cancel()
+        self.cancel_ack_timer()
