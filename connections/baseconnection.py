@@ -10,6 +10,7 @@ class BaseConnection(object):
     KEEPALIVE_INTERVAL = 5  # seconds
 
     def __init__(self, address, port, command_len):
+        self.socket = None
         self.address = address
         self.port = port
         self.command_len = command_len
