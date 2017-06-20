@@ -36,4 +36,12 @@ class SGHConnection(BaseConnection):
         super(SGHConnection, self).disconnect()
 
     def read_command(self):
+        switcher = {
+            sghcommands.KeepAlive.VALUE: self.read_ack
+        }
+        switcher[self.command[1]]()
         Logger.debug(__name__ + ': Received ' + self.command)
+
+    def read_ack(self):
+        Logger.debug(__name__ + ': Received ACK')
+        self.ack_timer.cancel()
