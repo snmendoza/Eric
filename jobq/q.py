@@ -10,7 +10,7 @@ class Q(object):
         self.marked_for_cancel = False
 
     def addJob(self, job):
-        Logger.debug(__name__ + ': Adding ' + job + ' to Q ' + self.tag)
+        Logger.debug(__name__ + ': Adding ' + str(job) + ' to Q ' + self.tag)
         if job.single_instance:
             self.jobs = [job]
         else:
@@ -18,13 +18,15 @@ class Q(object):
 
     def run(self):
         while self.jobs and not self.marked_for_cancel:
-            Logger.debug(__name__ + ': Q ' + self.tag + ' jobs: ' + self.jobs)
+            Logger.debug(__name__ + ': Q ' + self.tag +
+                         ' remaining jobs: ' + str(self.jobs))
             job = self.jobs.pop(0)
-            Logger.debug(__name__ + ': Running ' + job + ' on Q ' + self.tag)
+            Logger.debug(__name__ + ': Running ' + str(job) +
+                         ' on Q ' + self.tag)
             result = job.run()
             run_again = job.periodic or (not result and job.retry)
             if run_again and not self.jobs:
-                time.sleep(self.period / 1000.)
+                time.sleep(job.period / 1000.)
                 self.jobs.append(job)
 
     def cancel(self):

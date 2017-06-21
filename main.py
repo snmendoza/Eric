@@ -1,9 +1,9 @@
-import json
+from jobs import UpdateConfigJob
+from jobq.qpool import AppQPool
 import kivy
 from kivy.app import App
 from kivy.config import Config
 from kivy.logger import Logger
-from models.light import Light
 
 kivy.require('1.10.0')
 
@@ -11,20 +11,7 @@ kivy.require('1.10.0')
 class EricApp(App):
 
     def on_start(self):
-        self.read_config()
-
-    def read_config(self):
-        Logger.info(__name__ + ': Reading config file')
-        with open('config.json') as config_file:
-            config = json.load(config_file)
-            self.room_number = config['room_number']
-            self.sgh_address = config['sgh_address']
-            self.sgh_port = config['sgh_port']
-            self.pic_address = config['pic_address']
-            self.tv_remote_code = config['tv_remote_code']
-            self.lights = []
-            for light in config['lights']:
-                self.lights.append(Light(light['type']))
+        AppQPool.addJob(UpdateConfigJob())
 
 if __name__ == '__main__':
     Logger.info(__name__ + ': Running app')
