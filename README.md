@@ -6,7 +6,7 @@ Eric: Room Integrated Controller
 Requirements
 ------------
 
-* Kivy 1.9.1
+* Kivy 1.10.0. See [installation instructions](https://kivy.org/docs/installation/installation.html).
 * Pip packages listed on requirements.txt
 
 Configuration
