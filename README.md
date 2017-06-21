@@ -7,6 +7,7 @@ Requirements
 ------------
 
 * Kivy 1.9.1
+* Pip packages listed on requirements.txt
 
 Configuration
 -------------
