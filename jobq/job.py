@@ -11,5 +11,6 @@ class Job(object):
 
     def run(self):
         """This method should be overridden on child classes.
-        It must return a boolean value that represents the result of the job."""
+        It must return a boolean value that represents the result of the job.
+        """
         raise NotImplementedError

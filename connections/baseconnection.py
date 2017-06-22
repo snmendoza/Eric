@@ -1,3 +1,4 @@
+from appevents import AppEvents
 from commands.basecommands import BaseCommand
 from kivy.logger import Logger
 import socket
@@ -16,6 +17,10 @@ class BaseConnection(object):
         self.command_len = command_len
         self.command = []
         self.keepalive_timer = None
+        AppEvents.on_config_changed = self.on_config_changed
+
+    def on_config_changed(self):
+        self.disconnect()
 
     def start_keepalive_timer(self):
         if not self.keepalive_timer:
@@ -30,7 +35,7 @@ class BaseConnection(object):
     def connect(self):
         self.disconnect()
         Logger.info(__name__ + ': Connecting to ' +
-                    self.address + ':' + self.port)
+                    self.address + ':' + str(self.port))
         try:
             self.socket = socket.socket()
             self.socket.settimeout(self.TIMEOUT)
@@ -40,21 +45,26 @@ class BaseConnection(object):
                 data = self.socket.recv(1024)
                 if not data:
                     Logger.warning(': No data received from ' +
-                                   self.address + ':' + self.port)
+                                   self.address + ':' + str(self.port))
                     break
                 self.read_data(data)
             self.disconnect()
-        except socket.error as msg:
+        except socket.error as error:
             Logger.warning(__name__ + ': Connection to ' + self.address + ':' +
-                           self.port + ' failed with error: ' + msg)
+                           str(self.port) + ' failed with error: ' + str(error))
             self.disconnect()
 
     def disconnect(self):
         if (self.socket):
             Logger.info(__name__ + ': Disconnecting from ' +
-                        self.address + ':' + self.port)
+                        self.address + ':' + str(self.port))
             self.cancel_keepalive_timer()
-            self.socket.shutdown()
+            try:
+                self.socket.shutdown(socket.SHUT_RDWR)
+            except socket.error as error:
+                Logger.warning(__name__ + ': Shutdown on ' + self.address +
+                               ':' + str(self.port) + ' failed with error: ' +
+                               str(error))
             self.socket.close()
         self.socket = None
 
@@ -63,14 +73,14 @@ class BaseConnection(object):
         self.cancel_keepalive_timer()
         if (self.socket):
             Logger.debug(__name__ + ': Sending ' + command + ' to ' +
-                         self.address + ':' + self.port)
+                         self.address + ':' + str(self.port))
             try:
                 self.socket.send(command)
                 self.start_keepalive_timer()
                 success = True
             except socket.error as msg:
                 Logger.warning(__name__ + ': Sending ' + command + ' to ' +
-                               self.address + ':' + self.port +
+                               self.address + ':' + str(self.port) +
                                ' failed with error: ' + msg)
                 self.disconnect()
         return success

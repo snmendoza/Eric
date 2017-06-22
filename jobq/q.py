@@ -27,7 +27,8 @@ class Q(object):
                 result = job.run()
             except Exception as e:
                 Logger.error(__name__ + ': Q ' + self.tag +
-                             ' raised exception: ' + str(e))
+                             ' raised exception ' + e.__class__.__name__ +
+                             (': ' + str(e) if str(e) else ''))
                 result = False
             run_again = job.periodic or (not result and job.retry)
             if run_again and not self.jobs:

@@ -1,3 +1,4 @@
+from appconfig import AppConfig
 from baseconnection import BaseConnection
 from commands.basecommands import BaseCommand, SGHCommand
 from commands import sghcommands
@@ -9,10 +10,11 @@ class SGHConnection(BaseConnection):
 
     ACK_MAX_DELAY = 1  # seconds
 
-    def __init__(self, address, port):
+    def __init__(self):
         command_len = len(BaseCommand.START) + SGHCommand.NODE_LEN \
             + len(BaseCommand.END)
-        super(SGHConnection, self).__init__(address, port, command_len)
+        super(SGHConnection, self).__init__(
+            AppConfig.sgh_address, AppConfig.sgh_port, command_len)
         self.ack_timer = None
 
     def start_ack_timer(self):
