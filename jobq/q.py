@@ -23,7 +23,12 @@ class Q(object):
             job = self.jobs.pop(0)
             Logger.debug(__name__ + ': Running ' + str(job) +
                          ' on Q ' + self.tag)
-            result = job.run()
+            try:
+                result = job.run()
+            except Exception as e:
+                Logger.error(__name__ + ': Q ' + self.tag +
+                             ' raised exception: ' + str(e))
+                result = False
             run_again = job.periodic or (not result and job.retry)
             if run_again and not self.jobs:
                 time.sleep(job.period / 1000.)

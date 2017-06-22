@@ -6,8 +6,10 @@ class UpdateConfigJob(Job):
 
     def __init__(self):
         super(UpdateConfigJob, self).__init__(
-            task=lambda: AppConfig.read_file(),
             tag=self.__class__.__name__,
             single_instance=True,
             periodic=True,
-            period=30000)
+            period=5000)
+
+    def run(self):
+        AppConfig.read_file()
