@@ -66,7 +66,7 @@ class SGHConnection(BaseConnection):
         self.cancel_ack_timer()
 
     def on_status(self):
-        AppEvents.on_sgh_status_received(sghmodels.Status(self.command))
+        AppEvents.on_sgh_status(sghmodels.Status(self.command))
 
     def on_start_audio_msg(self):
         AppEvents.on_sgh_start_audio_msg(sghmodels.AudioMsg(self.command))
