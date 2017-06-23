@@ -1,8 +1,10 @@
 from appconfig import AppConfig
+from appevents import AppEvents
 from baseconnection import BaseConnection
 from commands.basecommands import BaseCommand, SGHCommand
 from commands import sghcommands
 from kivy.logger import Logger
+from models import sghmodels
 from threading import Timer
 
 
@@ -51,11 +53,23 @@ class SGHConnection(BaseConnection):
 
     def read_command(self):
         switcher = {
-            sghcommands.KeepAlive.VALUE: self.read_ack
+            sghcommands.KeepAlive.VALUE: self.on_keep_alive,
+            sghcommands.Status.VALUE: self.on_status,
+            sghcommands.StartAudioMsg.VALUE: self.on_start_audio_msg,
+            sghcommands.AccountInfo.VALUE: self.on_account_info
         }
         switcher[self.command[1]]()
         Logger.debug(__name__ + ': Received ' + self.command)
 
-    def read_ack(self):
+    def on_keep_alive(self):
         Logger.debug(__name__ + ': Received ACK')
         self.cancel_ack_timer()
+
+    def on_status(self):
+        AppEvents.on_sgh_status_received(sghmodels.Status(self.command))
+
+    def on_start_audio_msg(self):
+        AppEvents.on_sgh_start_audio_msg(sghmodels.AudioMsg(self.command))
+
+    def on_account_info(self):
+        AppEvents.on_sgh_account_info(sghmodels.AccountInfo(self.command))

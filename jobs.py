@@ -32,5 +32,5 @@ class ConnectionJob(Job):
         self.cls = cls
 
     def run(self):
-        (self.cls()).connect()
+        self.cls().connect()
         return False
