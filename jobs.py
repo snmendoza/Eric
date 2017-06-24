@@ -23,14 +23,14 @@ class UpdateConfigJob(Job):
 
 class ConnectionJob(Job):
 
-    def __init__(self, cls):
+    def __init__(self, connection_wrapper):
         super(ConnectionJob, self).__init__(
-            tag=cls.__name__,
+            tag=connection_wrapper.connection_cls.__name__,
             single_instance=True,
             periodic=True,
             period=5000)
-        self.cls = cls
+        self.cw = connection_wrapper
 
     def run(self):
-        self.cls().connect()
+        self.cw.connect()
         return False

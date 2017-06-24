@@ -1,6 +1,5 @@
 from appevents import AppEvents
-from connections.picconnection import PICConnection
-from connections.sghconnection import SGHConnection
+from connections.wrappers import PICCW, SGHCW
 from jobs import ConnectionJob
 from jobs import UpdateConfigJob
 from jobq.qpool import AppQPool
@@ -19,8 +18,8 @@ class EricApp(App):
         AppQPool.addJob(UpdateConfigJob())
 
     def on_config_available(self):
-        AppQPool.addJob(ConnectionJob(PICConnection))
-        AppQPool.addJob(ConnectionJob(SGHConnection))
+        AppQPool.addJob(ConnectionJob(PICCW))
+        AppQPool.addJob(ConnectionJob(SGHCW))
 
 if __name__ == '__main__':
     Logger.info(__name__ + ': Running app')
