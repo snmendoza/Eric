@@ -11,6 +11,7 @@ class BaseConnection(object):
     KEEPALIVE_INTERVAL = 5  # seconds
 
     def __init__(self, address, port, command_len):
+        self.connected = False
         self.socket = None
         self.address = address
         self.port = port
@@ -40,6 +41,7 @@ class BaseConnection(object):
             self.socket = socket.socket()
             self.socket.settimeout(self.TIMEOUT)
             self.socket.connect((self.address, self.port))
+            self.connected = True
             self.start_keepalive_timer()
             while True:
                 data = self.socket.recv(1024)
@@ -55,6 +57,7 @@ class BaseConnection(object):
             self.disconnect()
 
     def disconnect(self):
+        self.connected = False
         if (self.socket):
             Logger.info(__name__ + ': Disconnecting from ' +
                         self.address + ':' + str(self.port))
