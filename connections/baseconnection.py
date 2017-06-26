@@ -74,17 +74,17 @@ class BaseConnection(object):
     def send_command(self, command):
         success = False
         self.cancel_keepalive_timer()
-        if (self.socket):
-            Logger.debug(__name__ + ': Sending ' + command + ' to ' +
+        if (self.connected):
+            Logger.debug(__name__ + ': Sending ' + str(command) + ' to ' +
                          self.address + ':' + str(self.port))
             try:
-                self.socket.send(command)
+                self.socket.send(command.values)
                 self.start_keepalive_timer()
                 success = True
             except socket.error as msg:
-                Logger.warning(__name__ + ': Sending ' + command + ' to ' +
+                Logger.warning(__name__ + ': Sending ' + str(command) + ' to ' +
                                self.address + ':' + str(self.port) +
-                               ' failed with error: ' + msg)
+                               ' failed with error: ' + str(msg))
                 self.disconnect()
         return success
 
