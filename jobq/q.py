@@ -11,6 +11,7 @@ class Q(object):
 
     def addJob(self, job):
         Logger.debug(__name__ + ': Adding ' + str(job) + ' to Q ' + self.tag)
+        self.marked_for_cancel = False
         if job.single_instance:
             self.jobs = [job]
         else:

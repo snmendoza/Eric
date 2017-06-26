@@ -9,6 +9,7 @@ class AppConfigParser(object):
 
     def __init__(self):
         self.md5hash = None
+        self.ready = False
 
     def read_file(self):
         Logger.debug(__name__ + ': Reading config file')
@@ -42,6 +43,7 @@ class AppConfigParser(object):
         else:
             config_file.close()
             self.md5hash = md5hash
+            self.ready = True
             return True
 
 AppConfig = AppConfigParser()

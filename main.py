@@ -14,7 +14,7 @@ kivy.require('1.10.0')
 class EricApp(App):
 
     def on_start(self):
-        AppEvents.on_config_available = self.on_config_available
+        AppEvents.on_config_available += self.on_config_available
         AppQPool.addJob(UpdateConfigJob())
 
     def on_config_available(self):

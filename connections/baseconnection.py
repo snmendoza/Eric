@@ -18,7 +18,7 @@ class BaseConnection(object):
         self.command_len = command_len
         self.command = []
         self.keepalive_timer = None
-        AppEvents.on_config_changed = self.on_config_changed
+        AppEvents.on_config_changed += self.on_config_changed
 
     def on_config_changed(self):
         self.disconnect()
