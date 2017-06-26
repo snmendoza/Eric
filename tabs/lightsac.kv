@@ -15,13 +15,16 @@
                                 text: 'Aire'
                         Button:
                                 text: 'Power'
+                                on_release: root.ac_power()
                         BoxLayout:
                                 Button:
                                         text: '-'
+                                        on_release: root.ac_temp_down()
                                 Label:
                                         text: '----'
                                 Button:
                                         text: '+'
+                                        on_release: root.ac_temp_up()
                         BoxLayout:
                                 Label:
                                         text: 'Estado:'

@@ -67,7 +67,7 @@ class ACOn(PICCommand):
     VALUE = 9
 
     def __init__(self, temp_code):
-        super(ACOff, self).__init__([self.VALUE, temp_code])
+        super(ACOn, self).__init__([self.VALUE, temp_code])
 
 
 class ACOff(PICCommand):
@@ -83,7 +83,7 @@ class SetACTemp(PICCommand):
     VALUE = 11
 
     def __init__(self, temp_code):
-        super(SetACTemp, self).__init([self.VALUE, temp_code])
+        super(SetACTemp, self).__init__([self.VALUE, temp_code])
 
 
 class Intro(PICCommand):

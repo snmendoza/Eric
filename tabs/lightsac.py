@@ -1,10 +1,17 @@
 from appconfig import AppConfig
 from appevents import AppEvents
+from commands import piccommands
+from connections.wrappers import PICCW
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanelItem
+from models.ac import AC
 
 
 class LightsAC(TabbedPanelItem):
+
+    def __init__(self, **kwargs):
+        super(LightsAC, self).__init__(**kwargs)
+        self.ac = AC()
 
     def on_selected(self):
         if AppConfig.ready:
@@ -20,6 +27,22 @@ class LightsAC(TabbedPanelItem):
 
     def update_controls(self):
         pass
+
+    def ac_power(self):
+        if self.ac.status == AC.Status.off:
+            PICCW.send_command(piccommands.ACOn(self.ac.temp_code))
+        elif self.ac.status == AC.Status.on:
+            PICCW.send_command(piccommands.ACOff())
+
+    def ac_temp_down(self):
+        if self.ac.status == AC.Status.on:
+            self.ac.temp_down()
+            PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
+
+    def ac_temp_up(self):
+        if self.ac.status == AC.Status.on:
+            self.ac.temp_up()
+            PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
 
 
 class LightsRV(RecycleView):
