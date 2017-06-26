@@ -136,7 +136,8 @@ class Macro(PICCommand):
     VALUE = 18
 
     def __init__(self, number):
-        super(Macro, self).__init__([self.VALUE, number])
+        numbers = [number / 100, (number % 100) / 10, number % 10]
+        super(Macro, self).__init__([self.VALUE] + numbers)
 
 
 class Info(PICCommand):
