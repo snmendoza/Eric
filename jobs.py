@@ -34,3 +34,19 @@ class ConnectionJob(Job):
     def run(self):
         self.cw.connect()
         return False
+
+
+class SendCommandJob(Job):
+
+    def __init__(self, connection, command, on_success, on_error):
+        super(SendCommandJob, self).__init__(tag=command.__class__.__name__)
+        self.connection = connection
+        self.command = command
+        self.on_success = on_success
+        self.on_error = on_error
+
+    def run(self):
+        if self.connection.send_command(self.command):
+            self.on_success()
+        else:
+            self.on_error()
