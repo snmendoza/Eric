@@ -11,8 +11,7 @@ class TV(TabbedPanelItem):
     def on_selected(self):
         if AppConfig.ready:
             self.set_tv_remote_code()
-        else:
-            AppEvents.on_config_changed += self.set_tv_remote_code
+        AppEvents.on_config_changed += self.set_tv_remote_code
 
     def on_unselected(self):
         AppQPool.cancelJobs(piccommands.SetTVRemoteCode.__name__)

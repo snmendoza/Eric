@@ -26,8 +26,8 @@ class AppConfigParser(object):
                 self.pic_address = config['pic_address']
                 self.tv_remote_code = config['tv_remote_code']
                 self.lights = []
-                for light in config['lights']:
-                    self.lights.append(Light(light['type']))
+                for idx, light in enumerate(config['lights']):
+                    self.lights.append(Light(idx, light['type']))
                 AppEvents.on_config_changed()
         except IOError:
             Logger.error(__name__ + ': config.json cannot be opened')
