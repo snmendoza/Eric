@@ -1,9 +1,11 @@
+#:import MyTabbedPanel tabs.mytabbedpanel
 #:import TV tabs.tv
+#:import LightsAC tabs.lightsac
+#:include tabs/lightsac.kv
 #:include tabs/tv.kv
 
 RelativeLayout:
-        TabbedPanel:
+        MyTabbedPanel:
                 do_default_tab: False
                 TV:
-                TabbedPanelItem:
-                        text: 'Video'
+                LightsAC:

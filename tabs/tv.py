@@ -5,6 +5,12 @@ from kivy.uix.tabbedpanel import TabbedPanelItem
 
 class TV(TabbedPanelItem):
 
+    def on_selected(self):
+        print('selected TV')
+
+    def on_unselected(self):
+        print('unselected TV')
+
     def power(self):
         PICCW.send_command(piccommands.VideoOnOff())
 
