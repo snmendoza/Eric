@@ -1,26 +1,34 @@
 <LightsAC>:
         text: 'Luces/Aire'
         BoxLayout:
-        BoxLayout:
-                orientation: 'vertical'
-                Label:
-                        text: 'Aire'
-                Button:
-                        text: 'Power'
+                LightsRV:
+                        viewclass: 'Label'
+                        RecycleBoxLayout:
+                                default_size: None, dp(56)
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                                orientation: 'vertical'
                 BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                                text: 'Aire'
                         Button:
-                                text: '-'
-                        Label:
-                                text: '----'
-                        Button:
-                                text: '+'
-                BoxLayout:
-                        Label:
-                                text: 'Estado:'
-                        Label:
-                                text: '----'
-                BoxLayout:
-                        Label:
-                                text: 'Modo:'
-                        Label:
-                                text: '----'
+                                text: 'Power'
+                        BoxLayout:
+                                Button:
+                                        text: '-'
+                                Label:
+                                        text: '----'
+                                Button:
+                                        text: '+'
+                        BoxLayout:
+                                Label:
+                                        text: 'Estado:'
+                                Label:
+                                        text: '----'
+                        BoxLayout:
+                                Label:
+                                        text: 'Modo:'
+                                Label:
+                                        text: '----'

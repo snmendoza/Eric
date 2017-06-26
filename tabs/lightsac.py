@@ -1,5 +1,6 @@
 from appconfig import AppConfig
 from appevents import AppEvents
+from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanelItem
 
 
@@ -19,3 +20,10 @@ class LightsAC(TabbedPanelItem):
 
     def update_controls(self):
         pass
+
+
+class LightsRV(RecycleView):
+
+    def __init__(self, **kwargs):
+        super(LightsRV, self).__init__(**kwargs)
+        self.data = [{'text': str(x)} for x in range(100)]
