@@ -26,7 +26,7 @@ class BaseConnection(object):
     def start_keepalive_timer(self):
         if not self.keepalive_timer:
             self.keepalive_timer = Timer(
-                self.KEEPALIVE_INTERVAL, lambda: self.send_keepalive())
+                self.KEEPALIVE_INTERVAL, self.send_keepalive)
             self.keepalive_timer.start()
 
     def cancel_keepalive_timer(self):
