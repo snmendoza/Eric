@@ -14,22 +14,25 @@ class LightsAC(TabbedPanelItem):
     def __init__(self, **kwargs):
         super(LightsAC, self).__init__(**kwargs)
         self.ac = AC()
-        self.lights = []
+        self.light_controls = []
         self.can_update = True
         self.update_timer = None
 
     def on_selected(self):
         if AppConfig.ready:
             self.load_light_controls()
-        AppEvents.on_cofig_changed += self.load_light_controls()
-        AppEvents.on_pic_status += self.update_controls()
+        AppEvents.on_cofig_changed += self.load_light_controls
+        AppEvents.on_pic_status += self.update_controls
         PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
 
     def on_unselected(self):
         AppQPool.cancelJobs(piccommands.GetStatus.__name__)
 
     def load_light_controls(self):
-        pass
+        self.light_controls = []
+        for light in AppConfig.lights:
+            self.light_controls.append({'text': light.type})
+        self.ids.lights_rv.data = self.light_controls
 
     def update_controls(self):
         if self.can_update:
@@ -74,4 +77,3 @@ class LightsRV(RecycleView):
 
     def __init__(self, **kwargs):
         super(LightsRV, self).__init__(**kwargs)
-        self.data = [{'text': str(x)} for x in range(100)]
