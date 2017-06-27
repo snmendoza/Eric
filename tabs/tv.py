@@ -18,7 +18,9 @@ class TV(TabbedPanelItem):
 
     def set_tv_remote_code(self):
         PICCW.send_command(
-            piccommands.SetTVRemoteCode(AppConfig.tv_remote_code), retry=True)
+            piccommands.SetTVRemoteCode(AppConfig.tv_remote_code),
+            retry=True,
+            period=5000)
 
     def power(self):
         PICCW.send_command(piccommands.VideoOnOff())

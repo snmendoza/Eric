@@ -2,6 +2,7 @@ from appconfig import AppConfig
 from appevents import AppEvents
 from commands import piccommands
 from connections.wrappers import PICCW
+from jobq.qpool import AppQPool
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanelItem
 from models.ac import AC
@@ -18,9 +19,10 @@ class LightsAC(TabbedPanelItem):
             self.load_light_controls()
         AppEvents.on_cofig_changed += self.load_light_controls()
         AppEvents.on_pic_status += self.update_controls()
+        PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
 
     def on_unselected(self):
-        pass
+        AppQPool.cancelJobs(piccommands.GetStatus.__name__)
 
     def load_light_controls(self):
         pass

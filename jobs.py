@@ -38,12 +38,10 @@ class ConnectionJob(Job):
 class SendCommandJob(Job):
 
     def __init__(self, connection, command, **kwargs):
-        retry = kwargs.get('retry', False)
         super(SendCommandJob, self).__init__(
             tag=command.__class__.__name__,
             single_instance=True,
-            retry=retry,
-            period=5000)
+            **kwargs)
         self.connection = connection
         self.command = command
         self.on_success = kwargs.get('on_success', lambda: None)
