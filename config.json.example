@@ -6,21 +6,27 @@
 	"tv_remote_code": 1,
 	"lights": [
 		{
+			"name": "Light 1",
 			"type": "dimmer"
 		},
 		{
+			"name": "Light 2",
 			"type": "dimmer"
 		},
 		{
+			"name": "Light 3",
 			"type": "on_off"
 		},
 		{
+			"name": "Light 4",
 			"type": "on_off"
 		},
 		{
+			"name": "Light 5",
 			"type": "on_off"
 		},
 		{
+			"name": "Light 6",
 			"type": "on_off"
 		}
 	]
