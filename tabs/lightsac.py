@@ -47,8 +47,11 @@ class LightsAC(TabbedPanelItem):
         if self.can_update:
             if command:
                 self.ac.update_from_command(command)
-                for light in self.lights:
+                for light in AppConfig.lights:
                     light.update_from_command(command)
+            for light_control in self.ids.lights_rv_layout.children:
+                light_control.update_value(
+                    AppConfig.lights[light_control.light.number].value)
 
     def enable_update(self):
         self.can_update = True
@@ -78,6 +81,7 @@ class LightsAC(TabbedPanelItem):
             self.start_update_timer()
 
     def ac_temp_up(self):
+        self.update_controls()
         if self.ac.status == AC.Status.on:
             self.ac.temp_up()
             PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
@@ -108,7 +112,6 @@ class LightControl(BoxLayout):
         self.add_widget(self.control)
 
     def update_value(self, value):
-        self.light.set_value(value)
         self.control.update_value(self.light.value)
 
 
