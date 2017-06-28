@@ -1,8 +1,10 @@
+from commands.basecommands import PICCommand
 from kivy.logger import Logger
 
 
 class Light(object):
 
+    MAX_LIGHTS = 6
     TYPE_DIMMER = 'dimmer'
     TYPE_ON_OFF = 'on_off'
 
@@ -28,3 +30,7 @@ class Light(object):
                                ' only takes values of 0 or 100')
                 value = 0
             self.value = value
+
+    def update_from_command(self, command):
+        offset = len(PICCommand.START)
+        self.set_value(command.values[offset + self.number])

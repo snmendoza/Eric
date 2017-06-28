@@ -43,9 +43,12 @@ class LightsAC(TabbedPanelItem):
         self.ids.lights_rv.data = dimmers + on_offs
         self.update_controls()
 
-    def update_controls(self):
+    def update_controls(self, command=None):
         if self.can_update:
-            pass
+            if command:
+                self.ac.update_from_command(command)
+                for light in self.lights:
+                    light.update_from_command(command)
 
     def enable_update(self):
         self.can_update = True

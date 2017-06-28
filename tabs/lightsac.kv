@@ -22,7 +22,8 @@
                         orientation: 'vertical'
                         Label:
                                 text: 'Aire'
-                        Button:
+                        ToggleButton:
+                                id: ac_power
                                 text: 'Power'
                                 on_release: root.ac_power()
                         BoxLayout:
@@ -30,6 +31,7 @@
                                         text: '-'
                                         on_release: root.ac_temp_down()
                                 Label:
+                                        id: ac_temp
                                         text: '----'
                                 Button:
                                         text: '+'
@@ -38,9 +40,11 @@
                                 Label:
                                         text: 'Estado:'
                                 Label:
+                                        id: ac_status
                                         text: '----'
                         BoxLayout:
                                 Label:
                                         text: 'Modo:'
                                 Label:
+                                        id: ac_mode
                                         text: '----'

@@ -1,4 +1,6 @@
+from commands.basecommands import PICCommand
 from flufl.enum import Enum
+from models.light import Light
 
 
 class AC(object):
@@ -22,6 +24,12 @@ class AC(object):
     def set_temp(self, temp_code):
         self.temp_code = temp_code
         self.temp = self.TEMPS[temp_code]
+        if self.temp <= 21:
+            self.mode = 'Frio'
+        elif self.temp <= 25:
+            self.mode = 'Auto'
+        else:
+            self.mode = 'Calor'
 
     def temp_down(self):
         if self.temp_code > 0:
@@ -30,3 +38,8 @@ class AC(object):
     def temp_up(self):
         if self.temp_code < len(self.TEMPS) - 1:
             self.set_temp(self.temp_code + 1)
+
+    def update_from_command(self, command):
+        offset = len(PICCommand.START) + Light.MAX_LIGHTS
+        self.set_status(command.values[offset])
+        self.set_temp(command.values[offset + 1])
