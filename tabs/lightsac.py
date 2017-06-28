@@ -21,7 +21,7 @@ class LightsAC(TabbedPanelItem):
     def on_selected(self):
         if AppConfig.ready:
             self.load_light_controls()
-        AppEvents.on_cofig_changed += self.load_light_controls
+        AppEvents.on_config_changed += self.load_light_controls
         AppEvents.on_pic_status += self.update_controls
         PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
 
