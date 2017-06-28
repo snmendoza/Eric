@@ -1,11 +1,19 @@
+<Dimmer>:
+        min: 0
+        max: 100
+
+<LightControl>:
+        orientation: 'vertical'
+        Label:
+                id: name
+
 <LightsAC>:
         text: 'Luces/Aire'
         BoxLayout:
                 LightsRV:
                         id: lights_rv
-                        viewclass: 'Button'
+                        viewclass: 'LightControl'
                         RecycleBoxLayout:
-                                default_size: None, dp(56)
                                 default_size_hint: 1, None
                                 size_hint_y: None
                                 height: self.minimum_height

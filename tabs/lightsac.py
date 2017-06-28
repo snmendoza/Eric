@@ -3,9 +3,14 @@ from appevents import AppEvents
 from commands import piccommands
 from connections.wrappers import PICCW
 from jobq.qpool import AppQPool
+from kivy.properties import ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.slider import Slider
 from kivy.uix.tabbedpanel import TabbedPanelItem
+from kivy.uix.togglebutton import ToggleButton
 from models.ac import AC
+from models.light import Light
 from threading import Timer
 
 
@@ -14,7 +19,6 @@ class LightsAC(TabbedPanelItem):
     def __init__(self, **kwargs):
         super(LightsAC, self).__init__(**kwargs)
         self.ac = AC()
-        self.light_controls = []
         self.can_update = True
         self.update_timer = None
 
@@ -29,10 +33,15 @@ class LightsAC(TabbedPanelItem):
         AppQPool.cancelJobs(piccommands.GetStatus.__name__)
 
     def load_light_controls(self):
-        self.light_controls = []
+        dimmers = []
+        on_offs = []
         for light in AppConfig.lights:
-            self.light_controls.append({'text': light.type})
-        self.ids.lights_rv.data = self.light_controls
+            if light.type == Light.TYPE_DIMMER:
+                dimmers.append({'light': light})
+            else:
+                on_offs.append({'light': light})
+        self.ids.lights_rv.data = dimmers + on_offs
+        self.update_controls()
 
     def update_controls(self):
         if self.can_update:
@@ -55,25 +64,58 @@ class LightsAC(TabbedPanelItem):
         elif self.ac.status == AC.Status.on:
             self.ac.status = AC.Status.turning_off
             PICCW.send_command(piccommands.ACOff())
-        self.start_update_timer()
         self.update_controls()
+        self.start_update_timer()
 
     def ac_temp_down(self):
         if self.ac.status == AC.Status.on:
             self.ac.temp_down()
             PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
-            self.start_update_timer()
             self.update_controls()
+            self.start_update_timer()
 
     def ac_temp_up(self):
         if self.ac.status == AC.Status.on:
             self.ac.temp_up()
             PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
-            self.start_update_timer()
             self.update_controls()
+            self.start_update_timer()
 
 
 class LightsRV(RecycleView):
 
     def __init__(self, **kwargs):
         super(LightsRV, self).__init__(**kwargs)
+
+
+class LightControl(BoxLayout):
+
+    light = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(LightControl, self).__init__(**kwargs)
+        self.control = None
+
+    def on_light(self, instance, value):
+        if self.control:
+            self.remove_widget(self.control)
+        self.ids.name.text = self.light.name
+        self.control = \
+            Dimmer() if self.light.type == Light.TYPE_DIMMER else OnOff()
+        self.add_widget(self.control)
+
+    def update_value(self, value):
+        self.light.set_value(value)
+        self.control.update_value(self.light.value)
+
+
+class Dimmer(Slider):
+
+    def update_value(self, value):
+        self.value = value
+
+
+class OnOff(ToggleButton):
+
+    def update_value(self, value):
+        self.state = 'down' if value else 'normal'

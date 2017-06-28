@@ -23,4 +23,8 @@ class Light(object):
             Logger.warning(__name__ + ': Values above 100 are not allowed')
             self.value = 100
         else:
+            if self.type == self.TYPE_ON_OFF and 0 < value < 100:
+                Logger.warning(__name__ + ': Type ' + self.type +
+                               ' only takes values of 0 or 100')
+                value = 0
             self.value = value
