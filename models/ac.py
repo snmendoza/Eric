@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from commands.basecommands import PICCommand
 from flufl.enum import Enum
 from models.light import Light
@@ -6,6 +8,7 @@ from models.light import Light
 class AC(object):
 
     class Status(Enum):
+
         off = 0
         turning_on = 1
         on = 2
@@ -20,6 +23,12 @@ class AC(object):
 
     def set_status(self, status_code):
         self.status = self.Status[status_code]
+        self.status_label = {
+            self.Status.off: 'Apagado',
+            self.Status.turning_on: 'Encendiéndose',
+            self.Status.turning_off: 'Apagandose',
+            self.Status.on: 'Encendido'
+        }[self.status]
 
     def set_temp(self, temp_code):
         self.temp_code = temp_code

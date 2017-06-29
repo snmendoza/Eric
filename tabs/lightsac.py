@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from appconfig import AppConfig
 from appevents import AppEvents
 from commands import piccommands
@@ -54,8 +56,8 @@ class LightsAC(TabbedPanelItem):
                 light_control.update_value(
                     AppConfig.lights[light_control.light.number].value)
             self.ids.ac_power.update_status(self.ac.status)
-            self.ids.ac_temp.text = str(self.ac.temp) + ' C'
-            self.ids.ac_status.text = self.ac.status.name
+            self.ids.ac_temp.text = str(self.ac.temp) + '°C'
+            self.ids.ac_status.text = self.ac.status_label
             self.ids.ac_mode.text = self.ac.mode
 
     def enable_update(self):
@@ -70,10 +72,10 @@ class LightsAC(TabbedPanelItem):
 
     def ac_power(self):
         if self.ac.status == AC.Status.off:
-            self.ac.status = AC.Status.turning_on
+            self.ac.set_status(AC.Status.turning_on.value)
             PICCW.send_command(piccommands.ACOn(self.ac.temp_code))
         elif self.ac.status == AC.Status.on:
-            self.ac.status = AC.Status.turning_off
+            self.ac.set_status(AC.Status.turning_off.value)
             PICCW.send_command(piccommands.ACOff())
         self.update_controls()
         self.start_update_timer()
