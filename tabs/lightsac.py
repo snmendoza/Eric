@@ -3,6 +3,7 @@ from appevents import AppEvents
 from commands import piccommands
 from connections.wrappers import PICCW
 from jobq.qpool import AppQPool
+from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
@@ -52,6 +53,10 @@ class LightsAC(TabbedPanelItem):
             for light_control in self.ids.lights_rv_layout.children:
                 light_control.update_value(
                     AppConfig.lights[light_control.light.number].value)
+            self.ids.ac_power.update_status(self.ac.status)
+            self.ids.ac_temp.text = str(self.ac.temp) + ' C'
+            self.ids.ac_status.text = self.ac.status.name
+            self.ids.ac_mode.text = self.ac.mode
 
     def enable_update(self):
         self.can_update = True
@@ -125,3 +130,29 @@ class OnOff(ToggleButton):
 
     def update_value(self, value):
         self.state = 'down' if value else 'normal'
+
+
+class ACPower(ToggleButton):
+
+    def __init__(self, **kwargs):
+        super(ACPower, self).__init__(**kwargs)
+        self.clock = None
+        self.status = None
+
+    def update_status(self, status):
+        if self.status != status:
+            self.status = status
+            if self.clock:
+                self.clock.cancel()
+            if status == AC.Status.on:
+                self.disabled = False
+                self.state = 'down'
+            elif status == AC.Status.off:
+                self.disabled = False
+                self.state = 'normal'
+            else:
+                self.disabled = True
+                self.clock = Clock.schedule_interval(self.toggle, .25)
+
+    def toggle(self, dt):
+        self.state = 'normal' if self.state == 'down' else 'down'
