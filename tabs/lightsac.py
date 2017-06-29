@@ -195,7 +195,7 @@ class SceneControl(BoxLayout):
             btn = self.SceneButton(
                 scene=scene, text=scene.name, size_hint_y=None)
             btn.bind(on_release=lambda btn: self.select_scene(btn.scene))
-            self.dropdown.add_widget(btn)
+            self.dropdown.add_widget(btn, 1)
 
     def select_scene(self, scene):
         self.scene = scene
