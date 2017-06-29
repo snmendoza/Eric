@@ -7,18 +7,32 @@
         Label:
                 id: name
 
+<SceneControl>:
+        size_hint_y: None
+        Button:
+                id: select_scene
+                text: 'Select scene'
+                on_release: root.dropdown.open(self)
+        Button:
+                id: record_scene
+                text: 'Record'
+                on_release: root.record_scene()
+
 <LightsAC>:
         text: 'Luces/Aire'
         BoxLayout:
-                LightsRV:
-                        id: lights_rv
-                        viewclass: 'LightControl'
-                        RecycleBoxLayout:
-                                id: lights_rv_layout
-                                default_size_hint: 1, None
-                                size_hint_y: None
-                                height: self.minimum_height
-                                orientation: 'vertical'
+                BoxLayout:
+                        id: lights_layout
+                        orientation: 'vertical'
+                        LightsRV:
+                                id: lights_rv
+                                viewclass: 'LightControl'
+                                RecycleBoxLayout:
+                                        id: lights_rv_layout
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
                 BoxLayout:
                         orientation: 'vertical'
                         Label:

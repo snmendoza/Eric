@@ -8,6 +8,8 @@ from jobq.qpool import AppQPool
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.dropdown import DropDown
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.slider import Slider
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -24,6 +26,7 @@ class LightsAC(TabbedPanelItem):
         self.ac = AC()
         self.can_update = True
         self.update_timer = None
+        self.scene_control = None
 
     def on_selected(self):
         if AppConfig.ready:
@@ -55,6 +58,14 @@ class LightsAC(TabbedPanelItem):
                 on_offs.append({'light': light})
         self.ids.lights_rv.data = dimmers + on_offs
         self.update_controls()
+        if AppConfig.config_mode:
+            if not self.scene_control:
+                self.scene_control = SceneControl()
+                self.ids.lights_layout.add_widget(self.scene_control, 1)
+        else:
+            if self.scene_control:
+                self.ids.lights_layout.remove_widget(self.scene_control)
+                self.scene_control = None
 
     def update_controls(self, command=None):
         if self.can_update:
@@ -168,3 +179,29 @@ class ACPower(ToggleButton):
 
     def toggle(self, dt):
         self.state = 'normal' if self.state == 'down' else 'down'
+
+
+class SceneControl(BoxLayout):
+
+    class SceneButton(Button):
+
+        scene = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(SceneControl, self).__init__(**kwargs)
+        self.dropdown = DropDown()
+        self.scene = None
+        for scene in Light.Scenes:
+            btn = self.SceneButton(
+                scene=scene, text=scene.name, size_hint_y=None)
+            btn.bind(on_release=lambda btn: self.select_scene(btn.scene))
+            self.dropdown.add_widget(btn)
+
+    def select_scene(self, scene):
+        self.scene = scene
+        self.ids.select_scene.text = scene.name
+        self.dropdown.dismiss()
+
+    def record_scene(self):
+        if self.scene:
+            PICCW.send_command(piccommands.RecordLightScene(self.scene.value))

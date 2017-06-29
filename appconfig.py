@@ -20,6 +20,7 @@ class AppConfigParser(object):
                 Logger.info(__name__ + ': Config file updated')
                 config_file.seek(0)
                 config = json.load(config_file)
+                self.config_mode = config['config_mode']
                 self.room_number = config['room_number']
                 self.sgh_address = config['sgh_address']
                 self.sgh_port = config['sgh_port']

@@ -1,8 +1,15 @@
 from commands.basecommands import PICCommand
+from flufl.enum import Enum
 from kivy.logger import Logger
 
 
 class Light(object):
+
+    class Scenes(Enum):
+
+        intro_begin = 0
+        intro_end = 1
+        cleaning = 2
 
     MAX_LIGHTS = 6
     TYPE_DIMMER = 'dimmer'
