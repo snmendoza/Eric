@@ -28,12 +28,22 @@ class LightsAC(TabbedPanelItem):
     def on_selected(self):
         if AppConfig.ready:
             self.load_light_controls()
+            self.record_light_types()
         AppEvents.on_config_changed += self.load_light_controls
+        AppEvents.on_config_changed += self.record_light_types
         AppEvents.on_pic_status += self.update_controls
         PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
 
     def on_unselected(self):
         AppQPool.cancelJobs(piccommands.GetStatus.__name__)
+
+    def record_light_types(self):
+        light_types = [0 if light.type == Light.TYPE_DIMMER else 1
+                       for light in AppConfig.lights]
+        PICCW.send_command(
+            piccommands.RecordLightTypes(light_types),
+            retry=True,
+            period=5000)
 
     def load_light_controls(self):
         dimmers = []
