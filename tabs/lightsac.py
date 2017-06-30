@@ -27,14 +27,14 @@ class LightsAC(TabbedPanelItem):
         self.can_update = True
         self.update_timer = None
         self.scene_control = None
+        AppEvents.on_config_changed += self.load_light_controls
+        AppEvents.on_config_changed += self.record_light_types
+        AppEvents.on_pic_status += self.update_controls
 
     def on_selected(self):
         if AppConfig.ready:
             self.load_light_controls()
             self.record_light_types()
-        AppEvents.on_config_changed += self.load_light_controls
-        AppEvents.on_config_changed += self.record_light_types
-        AppEvents.on_pic_status += self.update_controls
         PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
 
     def on_unselected(self):
@@ -71,8 +71,9 @@ class LightsAC(TabbedPanelItem):
         if self.can_update:
             if command:
                 self.ac.update_from_command(command)
-                for light in AppConfig.lights:
-                    light.update_from_command(command)
+                if AppConfig.ready:
+                    for light in AppConfig.lights:
+                        light.update_from_command(command)
             for light_control in self.ids.lights_rv_layout.children:
                 light_control.update_value(
                     AppConfig.lights[light_control.light.number].value)
