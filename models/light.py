@@ -40,4 +40,4 @@ class Light(object):
 
     def update_from_command(self, command):
         offset = len(PICCommand.START)
-        self.set_value(command.values[offset + self.number])
+        self.set_value(command[offset + self.number])

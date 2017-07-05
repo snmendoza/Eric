@@ -59,7 +59,7 @@ class SGHConnection(BaseConnection):
             sghcommands.AccountInfo.VALUE: self.on_account_info
         }
         switcher[self.command[1]]()
-        Logger.debug(__name__ + ': Received ' + self.command)
+        Logger.debug(__name__ + ': Received ' + str(self.command))
 
     def on_keep_alive(self):
         Logger.debug(__name__ + ': Received ACK')
@@ -69,7 +69,7 @@ class SGHConnection(BaseConnection):
         AppEvents.on_sgh_status(sghmodels.Status(self.command))
 
     def on_start_audio_msg(self):
-        AppEvents.on_sgh_start_audio_msg(sghmodels.AudioMsg(self.command))
+        AppEvents.on_sgh_start_audio_msg(sghmodels.StartAudioMsg(self.command))
 
     def on_account_info(self):
         AppEvents.on_sgh_account_info(sghmodels.AccountInfo(self.command))

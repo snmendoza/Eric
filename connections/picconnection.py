@@ -3,7 +3,6 @@ from appevents import AppEvents
 from baseconnection import BaseConnection
 from commands.basecommands import BaseCommand, PICCommand
 from commands import piccommands
-from models import picmodels
 from kivy.logger import Logger
 
 
@@ -24,10 +23,10 @@ class PICConnection(BaseConnection):
             piccommands.Intro.VALUE: self.on_intro
         }
         switcher[self.command[1]]()
-        Logger.debug(__name__ + ': Received ' + self.command)
+        Logger.debug(__name__ + ': Received ' + str(self.command))
 
     def on_status(self):
-        AppEvents.on_pic_status(picmodels.Status(self.command))
+        AppEvents.on_pic_status(self.command)
 
     def on_intro(self):
         AppEvents.on_pic_intro()

@@ -19,7 +19,7 @@ class KeepAlive(SGHCommand):
     VALUE = 3
 
 
-class StartAudioMessage(SGHCommand):
+class StartAudioMsg(SGHCommand):
     """This command is sent by the SGH"""
     VALUE = 4
 

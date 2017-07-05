@@ -7,7 +7,6 @@ from threading import Timer
 
 class BaseConnection(object):
 
-    TIMEOUT = 5  # seconds
     KEEPALIVE_INTERVAL = 5  # seconds
 
     def __init__(self, address, port, command_len):
@@ -32,6 +31,7 @@ class BaseConnection(object):
     def cancel_keepalive_timer(self):
         if self.keepalive_timer:
             self.keepalive_timer.cancel()
+        self.keepalive_timer = None
 
     def connect(self):
         self.disconnect()
@@ -39,7 +39,6 @@ class BaseConnection(object):
                     self.address + ':' + str(self.port))
         try:
             self.socket = socket.socket()
-            self.socket.settimeout(self.TIMEOUT)
             self.socket.connect((self.address, self.port))
             self.connected = True
             self.start_keepalive_timer()
@@ -101,7 +100,6 @@ class BaseConnection(object):
 
     def send_keepalive(self):
         self.send_command(self.get_keepalive_command())
-        self.start_keepalive_timer()
 
     def get_keepalive_command(self):
         raise NotImplementedError
