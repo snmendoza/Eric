@@ -37,19 +37,19 @@ class ConnectionJob(Job):
 
 class SendCommandJob(Job):
 
-    def __init__(self, connection, command, **kwargs):
+    def __init__(self, cw, command, **kwargs):
         super(SendCommandJob, self).__init__(
             tag=command.__class__.__name__,
             single_instance=True,
             **kwargs)
-        self.connection = connection
+        self.cw = cw
         self.command = command
         self.on_success = kwargs.get('on_success', lambda: None)
         self.on_error = kwargs.get('on_error', lambda: None)
 
     def run(self):
-        result = self.connection and self.connection.connected \
-            and self.connection.send_command(self.command)
+        result = self.cw.connection and self.cw.connection.connected \
+            and self.cw.connection.send_command(self.command)
         if result:
             self.on_success()
         else:

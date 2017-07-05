@@ -15,7 +15,7 @@ class ConnectionWrapper(object):
         self.connection.connect()
 
     def send_command(self, command, **kwargs):
-        AppQPool.addJob(SendCommandJob(self.connection, command, **kwargs))
+        AppQPool.addJob(SendCommandJob(self, command, **kwargs))
 
 PICCW = ConnectionWrapper(PICConnection)
 SGHCW = ConnectionWrapper(SGHConnection)
