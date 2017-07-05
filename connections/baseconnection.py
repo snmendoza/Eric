@@ -90,7 +90,7 @@ class BaseConnection(object):
 
     def read_data(self, data):
         if self.command or data[:len(BaseCommand.START)] == BaseCommand.START:
-            self.command += data
+            self.command += map(ord, data)
             if len(self.command) == self.command_len:
                 self.read_command()
             elif len(self.command) > self.command_len:
