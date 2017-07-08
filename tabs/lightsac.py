@@ -143,17 +143,30 @@ class LightControl(BoxLayout):
     def update_value(self, value):
         self.control.update_value(self.light.value)
 
+    def set_bright(self):
+        if AppConfig.ready:
+            PICCW.send_command(piccommands.SetBright(
+                [light.value for light in AppConfig.lights]))
+
 
 class Dimmer(Slider):
 
     def update_value(self, value):
         self.value = value
 
+    def set_bright(self):
+        self.parent.light.set_value(self.value)
+        self.parent.set_bright()
+
 
 class OnOff(ToggleButton):
 
     def update_value(self, value):
         self.state = 'down' if value else 'normal'
+
+    def set_bright(self):
+        self.parent.light.set_value(100 if self.state == 'down' else 0)
+        self.parent.set_bright()
 
 
 class ACPower(ToggleButton):

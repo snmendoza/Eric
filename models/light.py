@@ -36,7 +36,7 @@ class Light(object):
                 Logger.warning(__name__ + ': Type ' + self.type +
                                ' only takes values of 0 or 100')
                 value = 0
-            self.value = value
+            self.value = int(round(value))
 
     def update_from_command(self, command):
         offset = len(PICCommand.START)
