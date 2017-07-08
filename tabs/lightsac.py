@@ -89,7 +89,7 @@ class LightsAC(TabbedPanelItem):
         self.can_update = False
         if self.update_timer:
             self.update_timer.cancel()
-        self.update_timer = Timer(1000, self.enable_update)
+        self.update_timer = Timer(1, self.enable_update)
         self.update_timer.start()
 
     def ac_power(self):
