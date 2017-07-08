@@ -8,18 +8,18 @@
                                 on_release: root.power()
                         GridLayout:
                                 cols: 2
-                                Button:
+                                RepeatButton:
                                         text: 'Vol+'
-                                        on_release: root.vol_up()
-                                Button:
+                                        on_repeat: root.vol_up()
+                                RepeatButton:
                                         text: 'Ch+'
-                                        on_release: root.ch_up()
-                                Button:
+                                        on_repeat: root.ch_up()
+                                RepeatButton:
                                         text: 'Vol-'
-                                        on_release: root.vol_down()
-                                Button:
+                                        on_repeat: root.vol_down()
+                                RepeatButton:
                                         text: 'Ch-'
-                                        on_release: root.ch_down()
+                                        on_repeat: root.ch_down()
                                 Button:
                                         text: 'Mute'
                                         on_release: root.mute()
