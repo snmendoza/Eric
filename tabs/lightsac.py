@@ -30,12 +30,13 @@ class LightsAC(TabbedPanelItem):
         AppEvents.on_config_changed += self.load_light_controls
         AppEvents.on_config_changed += self.record_light_types
         AppEvents.on_pic_status += self.update_controls
+        AppEvents.on_control_change += self.start_update_timer
 
     def on_selected(self):
         if AppConfig.ready:
             self.load_light_controls()
             self.record_light_types()
-        PICCW.send_command(piccommands.GetStatus(), periodic=True, period=1000)
+        PICCW.send_command(piccommands.GetStatus(), periodic=True, period=5000)
 
     def on_unselected(self):
         AppQPool.cancelJobs(piccommands.GetStatus.__name__)
@@ -89,7 +90,7 @@ class LightsAC(TabbedPanelItem):
         self.can_update = False
         if self.update_timer:
             self.update_timer.cancel()
-        self.update_timer = Timer(1, self.enable_update)
+        self.update_timer = Timer(2.5, self.enable_update)
         self.update_timer.start()
 
     def ac_power(self):
@@ -147,6 +148,7 @@ class LightControl(BoxLayout):
         if AppConfig.ready:
             PICCW.send_command(piccommands.SetBright(
                 [light.value for light in AppConfig.lights]))
+            AppEvents.on_control_change()
 
 
 class Dimmer(Slider):
