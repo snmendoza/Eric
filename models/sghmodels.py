@@ -6,13 +6,13 @@ import datetime
 class Status(object):
 
     def __init__(self, command):
-        self.app_can_update = bool(command[len(SGHCommand.START)])
+        self.app_can_update = bool(command[len(SGHCommand.START) + 1])
 
 
 class AudioMsg(object):
 
     def __init__(self, command):
-        offset = len(SGHCommand.START)
+        offset = len(SGHCommand.START) + 1
         self.key = command[offset]
         self.room_number = command[offset + 1]
         self.suffix = ['M', 'T', 'N'][command[offset + 2]]
@@ -21,7 +21,7 @@ class AudioMsg(object):
 class Info(object):
 
     def __init__(self, command):
-        offset = len(SGHCommand.START)
+        offset = len(SGHCommand.START) + 1
         self.datetime = datetime.datetime.strptime(
             command[offset:offset + 10], '%d%m%y%H%M')
         self.service_open = bool(command[offset + 10])

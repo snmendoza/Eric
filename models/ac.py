@@ -49,6 +49,6 @@ class AC(object):
             self.set_temp(self.temp_code + 1)
 
     def update_from_command(self, command):
-        offset = len(PICCommand.START) + Light.MAX_LIGHTS
+        offset = len(PICCommand.START) + 1 + Light.MAX_LIGHTS
         self.set_status(command[offset])
         self.set_temp(command[offset + 1])
