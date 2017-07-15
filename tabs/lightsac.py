@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from appconfig import AppConfig
-from appevents import AppEvents
+from appconfig import Config
+from appevents import Events
+from appqpool import QPool
 from commands import piccommands
 from connections.wrappers import PICCW
-from jobq.qpool import AppQPool
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -27,23 +27,23 @@ class LightsAC(TabbedPanelItem):
         self.can_update = True
         self.update_timer = None
         self.scene_control = None
-        AppEvents.on_config_changed += self.load_light_controls
-        AppEvents.on_config_changed += self.record_light_types
-        AppEvents.on_pic_status += self.update_controls
-        AppEvents.on_control_change += self.start_update_timer
+        Events.on_config_changed += self.load_light_controls
+        Events.on_config_changed += self.record_light_types
+        Events.on_pic_status += self.update_controls
+        Events.on_control_change += self.start_update_timer
 
     def on_selected(self):
-        if AppConfig.ready:
+        if Config.ready:
             self.load_light_controls()
             self.record_light_types()
         PICCW.send_command(piccommands.GetStatus(), periodic=True, period=5000)
 
     def on_unselected(self):
-        AppQPool.cancelJobs(piccommands.GetStatus.__name__)
+        QPool.cancelJobs(piccommands.GetStatus.__name__)
 
     def record_light_types(self):
         light_types = [0 if light.type == Light.TYPE_DIMMER else 1
-                       for light in AppConfig.lights]
+                       for light in Config.lights]
         PICCW.send_command(
             piccommands.RecordLightTypes(light_types),
             retry=True,
@@ -52,14 +52,14 @@ class LightsAC(TabbedPanelItem):
     def load_light_controls(self):
         dimmers = []
         on_offs = []
-        for light in AppConfig.lights:
+        for light in Config.lights:
             if light.type == Light.TYPE_DIMMER:
                 dimmers.append({'light': light})
             else:
                 on_offs.append({'light': light})
         self.ids.lights_rv.data = dimmers + on_offs
         self.update_controls()
-        if AppConfig.config_mode:
+        if Config.config_mode:
             if not self.scene_control:
                 self.scene_control = SceneControl()
                 self.ids.lights_layout.add_widget(self.scene_control, 1)
@@ -72,12 +72,12 @@ class LightsAC(TabbedPanelItem):
         if self.can_update:
             if command:
                 self.ac.update_from_command(command)
-                if AppConfig.ready:
-                    for light in AppConfig.lights:
+                if Config.ready:
+                    for light in Config.lights:
                         light.update_from_command(command)
             for light_control in self.ids.lights_rv_layout.children:
                 light_control.update_value(
-                    AppConfig.lights[light_control.light.number].value)
+                    Config.lights[light_control.light.number].value)
             self.ids.ac_power.update_status(self.ac.status)
             self.ids.ac_temp.text = str(self.ac.temp) + '°C'
             self.ids.ac_status.text = self.ac.status_label
@@ -145,10 +145,10 @@ class LightControl(BoxLayout):
         self.control.update_value(self.light.value)
 
     def set_bright(self):
-        if AppConfig.ready:
+        if Config.ready:
             PICCW.send_command(piccommands.SetBright(
-                [light.value for light in AppConfig.lights]))
-            AppEvents.on_control_change()
+                [light.value for light in Config.lights]))
+            Events.on_control_change()
 
 
 class Dimmer(Slider):

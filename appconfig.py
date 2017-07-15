@@ -1,11 +1,11 @@
-from appevents import AppEvents
+from appevents import Events
 import hashlib
 import json
 from kivy.logger import Logger
 from models.light import Light
 
 
-class AppConfigParser(object):
+class ConfigParser(object):
 
     def __init__(self):
         self.md5hash = None
@@ -29,7 +29,6 @@ class AppConfigParser(object):
                 self.lights = []
                 for idx, light in enumerate(config['lights']):
                     self.lights.append(Light(light['name'], idx, light['type']))
-                AppEvents.on_config_changed()
         except IOError:
             Logger.error(__name__ + ': config.json cannot be opened')
             return False
@@ -44,7 +43,12 @@ class AppConfigParser(object):
         else:
             config_file.close()
             self.md5hash = md5hash
-            self.ready = True
+            if not self.ready:
+                self.ready = True
+                Events.on_config_ready()
+            else:
+                Events.on_config_changed()
             return True
 
-AppConfig = AppConfigParser()
+
+Config = ConfigParser()

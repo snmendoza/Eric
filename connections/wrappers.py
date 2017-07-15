@@ -1,5 +1,5 @@
-from jobq.qpool import AppQPool
-from jobs import SendCommandJob
+from appqpool import QPool
+import jobs
 from picconnection import PICConnection
 from sghconnection import SGHConnection
 
@@ -15,7 +15,7 @@ class ConnectionWrapper(object):
         self.connection.connect()
 
     def send_command(self, command, **kwargs):
-        AppQPool.addJob(SendCommandJob(self, command, **kwargs))
+        QPool.addJob(jobs.SendCommand(self, command, **kwargs))
 
 PICCW = ConnectionWrapper(PICConnection)
 SGHCW = ConnectionWrapper(SGHConnection)

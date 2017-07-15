@@ -1,30 +1,24 @@
-from appconfig import AppConfig
-from appevents import AppEvents
+from appconfig import Config
 from jobq.job import Job
 
 
-class UpdateConfigJob(Job):
+class UpdateConfig(Job):
 
     def __init__(self):
-        super(UpdateConfigJob, self).__init__(
+        super(UpdateConfig, self).__init__(
             tag=self.__class__.__name__,
             single_instance=True,
             periodic=True,
             period=5000)
-        self.first_run = True
 
     def run(self):
-        result = AppConfig.read_file()
-        if self.first_run and result:
-            self.first_run = False
-            AppEvents.on_config_available()
-        return result
+        return Config.read_file()
 
 
-class ConnectionJob(Job):
+class Connection(Job):
 
     def __init__(self, connection_wrapper):
-        super(ConnectionJob, self).__init__(
+        super(Connection, self).__init__(
             tag=connection_wrapper.connection_cls.__name__,
             periodic=True,
             period=5000)
@@ -35,10 +29,10 @@ class ConnectionJob(Job):
         return False
 
 
-class SendCommandJob(Job):
+class SendCommand(Job):
 
     def __init__(self, cw, command, **kwargs):
-        super(SendCommandJob, self).__init__(
+        super(SendCommand, self).__init__(
             tag=command.__class__.__name__,
             single_instance=True,
             **kwargs)

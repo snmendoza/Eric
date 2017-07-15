@@ -1,5 +1,5 @@
-from appconfig import AppConfig
-from appevents import AppEvents
+from appconfig import Config
+from appevents import Events
 from baseconnection import BaseConnection
 from commands.basecommands import BaseCommand, SGHCommand
 from commands import sghcommands
@@ -16,7 +16,7 @@ class SGHConnection(BaseConnection):
         command_len = len(BaseCommand.START) + SGHCommand.NODE_LEN \
             + len(BaseCommand.END)
         super(SGHConnection, self).__init__(
-            AppConfig.sgh_address, AppConfig.sgh_port, command_len)
+            Config.sgh_address, Config.sgh_port, command_len)
         self.ack_timer = None
 
     def start_ack_timer(self):
@@ -66,10 +66,10 @@ class SGHConnection(BaseConnection):
         self.cancel_ack_timer()
 
     def on_status(self):
-        AppEvents.on_sgh_status(sghmodels.Status(self.command))
+        Events.on_sgh_status(sghmodels.Status(self.command))
 
     def on_start_audio_msg(self):
-        AppEvents.on_sgh_start_audio_msg(sghmodels.StartAudioMsg(self.command))
+        Events.on_sgh_start_audio_msg(sghmodels.StartAudioMsg(self.command))
 
     def on_account_info(self):
-        AppEvents.on_sgh_account_info(sghmodels.AccountInfo(self.command))
+        Events.on_sgh_account_info(sghmodels.AccountInfo(self.command))

@@ -1,4 +1,4 @@
-from appevents import AppEvents
+from appevents import Events
 from commands.basecommands import BaseCommand
 from kivy.logger import Logger
 import socket
@@ -17,7 +17,7 @@ class BaseConnection(object):
         self.command_len = command_len
         self.command = []
         self.keepalive_timer = None
-        AppEvents.on_config_changed += self.on_config_changed
+        Events.on_config_changed += self.on_config_changed
 
     def on_config_changed(self):
         self.disconnect()

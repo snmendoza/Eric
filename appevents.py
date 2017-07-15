@@ -1,3 +1,3 @@
-from events import Events
+import events
 
-AppEvents = Events()
+Events = events.Events()

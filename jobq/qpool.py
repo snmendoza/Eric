@@ -32,5 +32,3 @@ class QPool(object):
         for q in self.qs:
             if q.tag == tag:
                 q.cancel()
-
-AppQPool = QPool()
