@@ -1,6 +1,6 @@
+from appconnections import PICConnection, SGHConnection
 from appevents import Events
 from appqpool import QPool
-from connections.wrappers import PICCW, SGHCW
 import jobs
 import kivy
 from kivy.app import App
@@ -17,8 +17,8 @@ class EricApp(App):
         QPool.addJob(jobs.UpdateConfig())
 
     def on_config_ready(self):
-        QPool.addJob(jobs.Connection(PICCW))
-        QPool.addJob(jobs.Connection(SGHCW))
+        QPool.addJob(jobs.Connection(PICConnection))
+        QPool.addJob(jobs.Connection(SGHConnection))
 
 if __name__ == '__main__':
     Logger.info(__name__ + ': Running app')

@@ -1,5 +1,7 @@
 from appevents import Events
+from appqpool import QPool
 from commands.basecommands import BaseCommand
+import jobs
 from kivy.logger import Logger
 import socket
 from threading import Timer
@@ -9,11 +11,9 @@ class BaseConnection(object):
 
     KEEPALIVE_INTERVAL = 5  # seconds
 
-    def __init__(self, address, port, command_len):
+    def __init__(self, command_len):
         self.connected = False
         self.socket = None
-        self.address = address
-        self.port = port
         self.command_len = command_len
         self.command = []
         self.keepalive_timer = None
@@ -33,7 +33,9 @@ class BaseConnection(object):
             self.keepalive_timer.cancel()
         self.keepalive_timer = None
 
-    def connect(self):
+    def connect(self, address, port):
+        self.address = address
+        self.port = port
         self.disconnect()
         Logger.info(__name__ + ': Connecting to ' +
                     self.address + ':' + str(self.port))
@@ -70,22 +72,25 @@ class BaseConnection(object):
             self.socket.close()
         self.socket = None
 
-    def send_command(self, command):
+    def send_data(self, data):
         success = False
         self.cancel_keepalive_timer()
         if (self.connected):
-            Logger.debug(__name__ + ': Sending ' + str(command) + ' to ' +
+            Logger.debug(__name__ + ': Sending ' + str(data) + ' to ' +
                          self.address + ':' + str(self.port))
             try:
-                self.socket.send(command.values)
+                self.socket.send(data)
                 self.start_keepalive_timer()
                 success = True
             except socket.error as msg:
-                Logger.warning(__name__ + ': Sending ' + str(command) + ' to ' +
+                Logger.warning(__name__ + ': Sending ' + str(data) + ' to ' +
                                self.address + ':' + str(self.port) +
                                ' failed with error: ' + str(msg))
                 self.disconnect()
         return success
+
+    def send_command(self, command, **kwargs):
+        QPool.addJob(jobs.SendCommand(self, command, **kwargs))
 
     def read_data(self, data):
         if self.command or data[:len(BaseCommand.START)] == BaseCommand.START:
@@ -99,7 +104,7 @@ class BaseConnection(object):
         raise NotImplementedError
 
     def send_keepalive(self):
-        self.send_command(self.get_keepalive_command())
+        self.send_data(self.get_keepalive_command().values)
 
     def get_keepalive_command(self):
         raise NotImplementedError

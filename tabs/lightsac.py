@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from appconfig import Config
+from appconnections import PICConnection
 from appevents import Events
 from appqpool import QPool
 from commands import piccommands
-from connections.wrappers import PICCW
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -36,7 +36,8 @@ class LightsAC(TabbedPanelItem):
         if Config.ready:
             self.load_light_controls()
             self.record_light_types()
-        PICCW.send_command(piccommands.GetStatus(), periodic=True, period=5000)
+        PICConnection.send_command(
+            piccommands.GetStatus(), periodic=True, period=5000)
 
     def on_unselected(self):
         QPool.cancelJobs(piccommands.GetStatus.__name__)
@@ -44,7 +45,7 @@ class LightsAC(TabbedPanelItem):
     def record_light_types(self):
         light_types = [0 if light.type == Light.TYPE_DIMMER else 1
                        for light in Config.lights]
-        PICCW.send_command(
+        PICConnection.send_command(
             piccommands.RecordLightTypes(light_types),
             retry=True,
             period=5000)
@@ -96,17 +97,17 @@ class LightsAC(TabbedPanelItem):
     def ac_power(self):
         if self.ac.status == AC.Status.off:
             self.ac.set_status(AC.Status.turning_on.value)
-            PICCW.send_command(piccommands.ACOn(self.ac.temp_code))
+            PICConnection.send_command(piccommands.ACOn(self.ac.temp_code))
         elif self.ac.status == AC.Status.on:
             self.ac.set_status(AC.Status.turning_off.value)
-            PICCW.send_command(piccommands.ACOff())
+            PICConnection.send_command(piccommands.ACOff())
         self.update_controls()
         self.start_update_timer()
 
     def ac_temp_down(self):
         if self.ac.status == AC.Status.on:
             self.ac.temp_down()
-            PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
+            PICConnection.send_command(piccommands.SetACTemp(self.ac.temp_code))
             self.update_controls()
             self.start_update_timer()
 
@@ -114,7 +115,7 @@ class LightsAC(TabbedPanelItem):
         self.update_controls()
         if self.ac.status == AC.Status.on:
             self.ac.temp_up()
-            PICCW.send_command(piccommands.SetACTemp(self.ac.temp_code))
+            PICConnection.send_command(piccommands.SetACTemp(self.ac.temp_code))
             self.update_controls()
             self.start_update_timer()
 
@@ -146,7 +147,7 @@ class LightControl(BoxLayout):
 
     def set_bright(self):
         if Config.ready:
-            PICCW.send_command(piccommands.SetBright(
+            PICConnection.send_command(piccommands.SetBright(
                 [light.value for light in Config.lights]))
             Events.on_control_change()
 
@@ -220,4 +221,5 @@ class SceneControl(BoxLayout):
 
     def record_scene(self):
         if self.scene:
-            PICCW.send_command(piccommands.RecordLightScene(self.scene.value))
+            PICConnection.send_command(
+                piccommands.RecordLightScene(self.scene.value))

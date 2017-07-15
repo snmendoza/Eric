@@ -15,9 +15,11 @@ class SGHConnection(BaseConnection):
     def __init__(self):
         command_len = len(BaseCommand.START) + SGHCommand.NODE_LEN \
             + len(BaseCommand.END)
-        super(SGHConnection, self).__init__(
-            Config.sgh_address, Config.sgh_port, command_len)
+        super(SGHConnection, self).__init__(command_len)
         self.ack_timer = None
+
+    def connect(self):
+        super(SGHConnection, self).connect(Config.sgh_address, Config.sgh_port)
 
     def start_ack_timer(self):
         if not self.ack_timer:
@@ -36,8 +38,8 @@ class SGHConnection(BaseConnection):
         # Remember to update status on reboot.
         return sghcommands.EricStatus(True, False)
 
-    def send_command(self, command):
-        if super(SGHConnection, self).send_command(command):
+    def send_data(self, data):
+        if super(SGHConnection, self).send_data(data):
             self.start_ack_timer()
             return True
         else:

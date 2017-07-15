@@ -11,8 +11,10 @@ class PICConnection(BaseConnection):
     def __init__(self):
         command_len = len(BaseCommand.START) + PICCommand.NODE_LEN \
             + len(BaseCommand.END)
-        super(PICConnection, self).__init__(
-            Config.pic_address, 9761, command_len)
+        super(PICConnection, self).__init__(command_len)
+
+    def connect(self):
+        super(PICConnection, self).connect(Config.pic_address, 9761)
 
     def get_keepalive_command(self):
         return piccommands.KeepAlive()

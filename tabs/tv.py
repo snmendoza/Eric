@@ -1,8 +1,8 @@
 from appconfig import Config
+from appconnections import PICConnection
 from appevents import Events
 from appqpool import QPool
 from commands import piccommands
-from connections.wrappers import PICCW
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -22,34 +22,34 @@ class TV(TabbedPanelItem):
         QPool.cancelJobs(piccommands.SetTVRemoteCode.__name__)
 
     def set_tv_remote_code(self):
-        PICCW.send_command(
+        PICConnection.send_command(
             piccommands.SetTVRemoteCode(Config.tv_remote_code),
             retry=True,
             period=5000)
 
     def power(self):
-        PICCW.send_command(piccommands.VideoOnOff())
+        PICConnection.send_command(piccommands.VideoOnOff())
 
     def vol_up(self):
-        PICCW.send_command(piccommands.VolumeUp())
+        PICConnection.send_command(piccommands.VolumeUp())
 
     def vol_down(self):
-        PICCW.send_command(piccommands.VolumeDown())
+        PICConnection.send_command(piccommands.VolumeDown())
 
     def ch_up(self):
-        PICCW.send_command(piccommands.ChannelUp())
+        PICConnection.send_command(piccommands.ChannelUp())
 
     def ch_down(self):
-        PICCW.send_command(piccommands.ChannelDown())
+        PICConnection.send_command(piccommands.ChannelDown())
 
     def mute(self):
-        PICCW.send_command(piccommands.VideoMute())
+        PICConnection.send_command(piccommands.VideoMute())
 
     def info(self):
-        PICCW.send_command(piccommands.Info())
+        PICConnection.send_command(piccommands.Info())
 
     def digit(self, digit):
-        PICCW.send_command(piccommands.Digit(digit))
+        PICConnection.send_command(piccommands.Digit(digit))
 
 
 class RepeatButton(Button):

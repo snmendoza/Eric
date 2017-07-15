@@ -17,33 +17,33 @@ class UpdateConfig(Job):
 
 class Connection(Job):
 
-    def __init__(self, connection_wrapper):
+    def __init__(self, connection):
         super(Connection, self).__init__(
-            tag=connection_wrapper.connection_cls.__name__,
+            tag=connection.__class__.__name__,
             periodic=True,
             period=5000)
-        self.cw = connection_wrapper
+        self.connection = connection
 
     def run(self):
-        self.cw.connect()
+        self.connection.connect()
         return False
 
 
 class SendCommand(Job):
 
-    def __init__(self, cw, command, **kwargs):
+    def __init__(self, connection, command, **kwargs):
         super(SendCommand, self).__init__(
             tag=command.__class__.__name__,
             single_instance=True,
             **kwargs)
-        self.cw = cw
+        self.connection = connection
         self.command = command
         self.on_success = kwargs.get('on_success', lambda: None)
         self.on_error = kwargs.get('on_error', lambda: None)
 
     def run(self):
-        result = self.cw.connection and self.cw.connection.connected \
-            and self.cw.connection.send_command(self.command)
+        result = self.connection.connected \
+            and self.connection.send_data(self.command.values)
         if result:
             self.on_success()
         else:
