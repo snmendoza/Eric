@@ -1,6 +1,7 @@
 {
 	"config_mode": false,
 	"room_number": 1,
+	"m3s_address": "192.168.0.30",
 	"sgh_address": "192.168.0.20",
 	"sgh_port": 3001,
 	"pic_address": "192.168.0.201",

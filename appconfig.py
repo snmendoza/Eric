@@ -22,6 +22,7 @@ class ConfigParser(object):
                 config = json.load(config_file)
                 self.config_mode = config['config_mode']
                 self.room_number = config['room_number']
+                self.m3s_address = config['m3s_address']
                 self.sgh_address = config['sgh_address']
                 self.sgh_port = config['sgh_port']
                 self.pic_address = config['pic_address']
