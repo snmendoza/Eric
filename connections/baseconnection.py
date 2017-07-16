@@ -104,7 +104,7 @@ class BaseConnection(object):
         raise NotImplementedError
 
     def send_keepalive(self):
-        self.send_data(self.get_keepalive_command().values)
+        self.send_data(self.get_keepalive_command().data)
 
     def get_keepalive_command(self):
         raise NotImplementedError

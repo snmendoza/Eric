@@ -43,7 +43,7 @@ class SendCommand(Job):
 
     def run(self):
         result = self.connection.connected \
-            and self.connection.send_data(self.command.values)
+            and self.connection.send_data(self.command.data)
         if result:
             self.on_success()
         else:

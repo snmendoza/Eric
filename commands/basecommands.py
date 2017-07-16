@@ -1,11 +1,12 @@
 class BaseCommand(object):
 
-    START = bytearray([0x29])
-    END = bytearray([0, 0])
+    START = [0x29]
+    END = [0, 0]
 
     def __init__(self, node_len, params):
         node = params[:node_len] + [0] * (node_len - len(params))
-        self.values = self.START + bytearray(node) + self.END
+        self.values = self.START + node + self.END
+        self.data = bytearray(self.values)
 
 
 class PICCommand(BaseCommand):
