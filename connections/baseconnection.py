@@ -15,7 +15,7 @@ class BaseConnection(object):
         self.connected = False
         self.socket = None
         self.command_len = command_len
-        self.command = []
+        self.data = []
         self.keepalive_timer = None
         Events.on_config_changed += self.on_config_changed
 
@@ -93,14 +93,17 @@ class BaseConnection(object):
         QPool.addJob(jobs.SendCommand(self, command, **kwargs))
 
     def read_data(self, data):
-        if self.command or data[:len(BaseCommand.START)] == BaseCommand.START:
-            self.command += map(ord, data)
-            if len(self.command) == self.command_len:
-                self.read_command()
-            elif len(self.command) > self.command_len:
-                self.command = []
+        if self.data or data[:len(BaseCommand.START)] == BaseCommand.START:
+            self.data += map(ord, data)
+            if len(self.data) == self.data_len:
+                node_len = self.command_len - len(BaseCommand.START) - \
+                    len(BaseCommand.END)
+                params = self.data[len(BaseCommand.START):-len(BaseCommand.END)]
+                self.read_command(BaseCommand(node_len, params))
+            elif len(self.data) > self.data_len:
+                self.data = []
 
-    def read_command(self):
+    def read_command(self, command):
         raise NotImplementedError
 
     def send_keepalive(self):

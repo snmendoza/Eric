@@ -1,7 +1,7 @@
 from appconfig import Config
 from appevents import Events
 from baseconnection import BaseConnection
-from commands.basecommands import BaseCommand, SGHCommand
+from commands.basecommands import SGHCommand
 from commands import sghcommands
 from kivy.logger import Logger
 from models import sghmodels
@@ -13,8 +13,8 @@ class SGHConnection(BaseConnection):
     ACK_MAX_DELAY = 1  # seconds
 
     def __init__(self):
-        command_len = len(BaseCommand.START) + SGHCommand.NODE_LEN \
-            + len(BaseCommand.END)
+        command_len = len(SGHCommand.START) + SGHCommand.NODE_LEN \
+            + len(SGHCommand.END)
         super(SGHConnection, self).__init__(command_len)
         self.ack_timer = None
 
@@ -53,25 +53,25 @@ class SGHConnection(BaseConnection):
         self.cancel_ack_timer()
         super(SGHConnection, self).disconnect()
 
-    def read_command(self):
+    def read_command(self, command):
         switcher = {
             sghcommands.KeepAlive.VALUE: self.on_keep_alive,
             sghcommands.Status.VALUE: self.on_status,
             sghcommands.StartAudioMsg.VALUE: self.on_start_audio_msg,
             sghcommands.AccountInfo.VALUE: self.on_account_info
         }
-        switcher[self.command[1]]()
-        Logger.debug(__name__ + ': Received ' + str(self.command))
+        switcher[command[len(SGHCommand.START)]](command)
+        Logger.debug(__name__ + ': Received ' + str(command.values))
 
-    def on_keep_alive(self):
+    def on_keep_alive(self, command):
         Logger.debug(__name__ + ': Received ACK')
         self.cancel_ack_timer()
 
-    def on_status(self):
+    def on_status(self, command):
         Events.on_sgh_status(sghmodels.Status(self.command))
 
-    def on_start_audio_msg(self):
+    def on_start_audio_msg(self, command):
         Events.on_sgh_start_audio_msg(sghmodels.StartAudioMsg(self.command))
 
-    def on_account_info(self):
+    def on_account_info(self, command):
         Events.on_sgh_account_info(sghmodels.AccountInfo(self.command))
