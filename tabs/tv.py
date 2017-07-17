@@ -12,7 +12,7 @@ class TV(TabbedPanelItem):
 
     def __init__(self, **kwargs):
         super(TV, self).__init__(**kwargs)
-        Events.on_config_changed += self.set_tv_remote_code
+        Events.on_config_update += self.set_tv_remote_code
 
     def on_selected(self):
         if Config.ready:

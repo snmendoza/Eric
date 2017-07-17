@@ -17,9 +17,9 @@ class BaseConnection(object):
         self.command_len = command_len
         self.data = []
         self.keepalive_timer = None
-        Events.on_config_changed += self.on_config_changed
+        Events.on_config_update += self.on_config_update
 
-    def on_config_changed(self):
+    def on_config_update(self):
         self.disconnect()
 
     def start_keepalive_timer(self):

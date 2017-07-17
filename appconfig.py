@@ -48,7 +48,7 @@ class ConfigParser(object):
                 self.ready = True
                 Events.on_config_ready()
             else:
-                Events.on_config_changed()
+                Events.on_config_update()
             return True
 
 

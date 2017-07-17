@@ -27,8 +27,8 @@ class LightsAC(TabbedPanelItem):
         self.can_update = True
         self.update_timer = None
         self.scene_control = None
-        Events.on_config_changed += self.load_light_controls
-        Events.on_config_changed += self.record_light_types
+        Events.on_config_update += self.load_light_controls
+        Events.on_config_update += self.record_light_types
         Events.on_pic_status += self.update_controls
         Events.on_control_change += self.start_update_timer
 
