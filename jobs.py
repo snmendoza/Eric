@@ -9,7 +9,7 @@ class UpdateConfig(Job):
             tag=self.__class__.__name__,
             single_instance=True,
             periodic=True,
-            period=5000)
+            period=5)
 
     def run(self):
         return Config.read_file()
@@ -21,7 +21,7 @@ class Connection(Job):
         super(Connection, self).__init__(
             tag=connection.__class__.__name__,
             periodic=True,
-            period=5000)
+            period=5)
         self.connection = connection
 
     def run(self):

@@ -37,7 +37,7 @@ class LightsAC(TabbedPanelItem):
             self.load_light_controls()
             self.record_light_types()
         PICConnection.send_command(
-            piccommands.GetStatus(), periodic=True, period=5000)
+            piccommands.GetStatus(), periodic=True, period=5)
 
     def on_unselected(self):
         QPool.cancelJobs(piccommands.GetStatus.__name__)
@@ -48,7 +48,7 @@ class LightsAC(TabbedPanelItem):
         PICConnection.send_command(
             piccommands.RecordLightTypes(light_types),
             retry=True,
-            period=5000)
+            period=5)
 
     def load_light_controls(self):
         dimmers = []

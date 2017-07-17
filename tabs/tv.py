@@ -25,7 +25,7 @@ class TV(TabbedPanelItem):
         PICConnection.send_command(
             piccommands.SetTVRemoteCode(Config.tv_remote_code),
             retry=True,
-            period=5000)
+            period=5)
 
     def power(self):
         PICConnection.send_command(piccommands.VideoOnOff())

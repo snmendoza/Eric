@@ -33,7 +33,7 @@ class Q(object):
                 result = False
             run_again = job.periodic or (not result and job.retry)
             if run_again and not self.jobs:
-                time.sleep(job.period / 1000.)
+                time.sleep(job.period)
                 self.jobs.append(job)
 
     def cancel(self):
