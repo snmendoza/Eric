@@ -1,9 +1,10 @@
-from commands.basecommands import PICCommand
 from flufl.enum import Enum
 from kivy.logger import Logger
 
 
 class Light(object):
+
+    MAX_LIGHTS = 6
 
     class Scenes(Enum):
 
@@ -11,18 +12,16 @@ class Light(object):
         intro_end = 1
         cleaning = 2
 
-    MAX_LIGHTS = 6
-    TYPE_DIMMER = 'dimmer'
-    TYPE_ON_OFF = 'on_off'
+    class Types(Enum):
+
+        dimmer = 'dimmer'
+        on_off = 'on_off'
 
     def __init__(self, name, number, type):
-        if type not in [self.TYPE_DIMMER, self.TYPE_ON_OFF]:
-            raise ValueError('Light type %r is not supported' % type)
-        else:
-            self.name = name
-            self.number = number
-            self.type = type
-            self.set_value(0)
+        self.name = name
+        self.number = number
+        self.type = self.Types[type]
+        self.set_value(0)
 
     def set_value(self, value):
         if value < 0:
@@ -32,12 +31,11 @@ class Light(object):
             Logger.warning(__name__ + ': Values above 100 are not allowed')
             self.value = 100
         else:
-            if self.type == self.TYPE_ON_OFF and 0 < value < 100:
+            if self.type == self.Types.on_off and 0 < value < 100:
                 Logger.warning(__name__ + ': Type ' + self.type +
                                ' only takes values of 0 or 100')
                 value = 0
             self.value = int(round(value))
 
     def update_from_command(self, command):
-        offset = len(PICCommand.START) + 1
-        self.set_value(command[offset + self.number])
+        self.set_value(command.params[1 + self.number])
