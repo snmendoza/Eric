@@ -4,8 +4,8 @@ class BaseCommand(object):
     END = [0, 0]
 
     def __init__(self, node_len, params):
-        node = params[:node_len] + [0] * (node_len - len(params))
-        self.values = self.START + node + self.END
+        self.params = params[:node_len] + [0] * (node_len - len(params))
+        self.values = self.START + self.params + self.END
         self.data = bytearray(self.values)
 
 
