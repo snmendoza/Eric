@@ -1,4 +1,4 @@
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelHeader
+from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelHeader, TabbedPanelItem
 
 
 class MyTabbedPanel(TabbedPanel):
@@ -17,3 +17,12 @@ class MyTabbedPanel(TabbedPanel):
     def _switch_to_first_tab(self, *l):
         super(MyTabbedPanel, self)._switch_to_first_tab(*l)
         self._current_tab.on_selected()
+
+
+class MyTabbedPanelItem(TabbedPanelItem):
+
+    def on_selected(self):
+        pass
+
+    def on_unselected(self):
+        pass
