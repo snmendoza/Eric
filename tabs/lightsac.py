@@ -36,11 +36,6 @@ class LightsAC(TabbedPanelItem):
         if Config.ready:
             self.load_light_controls()
             self.record_light_types()
-        PICConnection.send_command(
-            piccommands.GetStatus(), periodic=True, period=5)
-
-    def on_unselected(self):
-        QPool.cancelJobs(piccommands.GetStatus.__name__)
 
     def record_light_types(self):
         light_types = [0 if light.type == Light.TYPE_DIMMER else 1

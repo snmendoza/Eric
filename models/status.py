@@ -10,7 +10,7 @@ class Status(object):
         self.lights = []
         Events.on_config_ready = self.update_from_config
         Events.on_config_update = self.update_from_config
-        Events.on_pic_status = self.update_status
+        Events.on_pic_status = self.update_from_command
 
     def update_from_config(self):
         for idx, light in enumerate(Config.lights):
