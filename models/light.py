@@ -14,8 +14,8 @@ class Light(object):
 
     class Types(Enum):
 
-        dimmer = 'dimmer'
-        on_off = 'on_off'
+        dimmer = 0
+        on_off = 1
 
     def __init__(self, name, number, type):
         self.name = name

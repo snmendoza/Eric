@@ -58,8 +58,9 @@ class RecordLightTypes(PICCommand):
 
     VALUE = 8
 
-    def __init__(self, light_types):
-        super(RecordLightTypes, self).__init__([self.VALUE] + light_types)
+    def __init__(self, lights):
+        super(RecordLightTypes, self).__init__(
+            [self.VALUE] + [light.type.value for light in lights])
 
 
 class ACOn(PICCommand):

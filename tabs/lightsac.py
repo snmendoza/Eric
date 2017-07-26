@@ -3,7 +3,7 @@
 from appconfig import Config
 from appconnections import PICConnection
 from appevents import Events
-from appqpool import QPool
+from appstatus import Status
 from commands import piccommands
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
@@ -12,44 +12,33 @@ from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.slider import Slider
-from kivy.uix.tabbedpanel import TabbedPanelItem
 from kivy.uix.togglebutton import ToggleButton
 from models.ac import AC
 from models.light import Light
 from threading import Timer
+from uix.mytabbedpanel import MyTabbedPanelItem
 
 
-class LightsAC(TabbedPanelItem):
+class LightsAC(MyTabbedPanelItem):
 
     def __init__(self, **kwargs):
         super(LightsAC, self).__init__(**kwargs)
-        self.ac = AC()
         self.can_update = True
         self.update_timer = None
         self.scene_control = None
-        Events.on_config_update += self.load_light_controls
-        Events.on_config_update += self.record_light_types
-        Events.on_pic_status += self.update_controls
+        Events.on_status_config_update += self.load_light_controls
+        Events.on_status_update += self.update_controls
         Events.on_control_change += self.start_update_timer
 
     def on_selected(self):
         if Config.ready:
             self.load_light_controls()
-            self.record_light_types()
-
-    def record_light_types(self):
-        light_types = [0 if light.type == Light.TYPE_DIMMER else 1
-                       for light in Config.lights]
-        PICConnection.send_command(
-            piccommands.RecordLightTypes(light_types),
-            retry=True,
-            period=5)
 
     def load_light_controls(self):
         dimmers = []
         on_offs = []
-        for light in Config.lights:
-            if light.type == Light.TYPE_DIMMER:
+        for light in Status.lights:
+            if light.type == Light.Types.dimmer:
                 dimmers.append({'light': light})
             else:
                 on_offs.append({'light': light})
@@ -66,18 +55,13 @@ class LightsAC(TabbedPanelItem):
 
     def update_controls(self, command=None):
         if self.can_update:
-            if command:
-                self.ac.update_from_command(command)
-                if Config.ready:
-                    for light in Config.lights:
-                        light.update_from_command(command)
             for light_control in self.ids.lights_rv_layout.children:
                 light_control.update_value(
-                    Config.lights[light_control.light.number].value)
-            self.ids.ac_power.update_status(self.ac.status)
-            self.ids.ac_temp.text = str(self.ac.temp) + '°C'
-            self.ids.ac_status.text = self.ac.status_label
-            self.ids.ac_mode.text = self.ac.mode
+                    Status.lights[light_control.light.number].value)
+            self.ids.ac_power.update_status(Status.ac.status)
+            self.ids.ac_temp.text = str(Status.ac.temp) + '°C'
+            self.ids.ac_status.text = Status.ac.status_label
+            self.ids.ac_mode.text = Status.ac.mode
 
     def enable_update(self):
         self.can_update = True
@@ -90,27 +74,29 @@ class LightsAC(TabbedPanelItem):
         self.update_timer.start()
 
     def ac_power(self):
-        if self.ac.status == AC.Status.off:
-            self.ac.set_status(AC.Status.turning_on.value)
-            PICConnection.send_command(piccommands.ACOn(self.ac.temp_code))
-        elif self.ac.status == AC.Status.on:
-            self.ac.set_status(AC.Status.turning_off.value)
+        if Status.ac.status == AC.Status.off:
+            Status.ac.set_status(AC.Status.turning_on.value)
+            PICConnection.send_command(piccommands.ACOn(Status.ac.temp_code))
+        elif Status.ac.status == AC.Status.on:
+            Status.ac.set_status(AC.Status.turning_off.value)
             PICConnection.send_command(piccommands.ACOff())
         self.update_controls()
         self.start_update_timer()
 
     def ac_temp_down(self):
-        if self.ac.status == AC.Status.on:
-            self.ac.temp_down()
-            PICConnection.send_command(piccommands.SetACTemp(self.ac.temp_code))
+        if Status.ac.status == AC.Status.on:
+            Status.ac.temp_down()
+            PICConnection.send_command(
+                piccommands.SetACTemp(Status.ac.temp_code))
             self.update_controls()
             self.start_update_timer()
 
     def ac_temp_up(self):
         self.update_controls()
-        if self.ac.status == AC.Status.on:
-            self.ac.temp_up()
-            PICConnection.send_command(piccommands.SetACTemp(self.ac.temp_code))
+        if Status.ac.status == AC.Status.on:
+            Status.ac.temp_up()
+            PICConnection.send_command(
+                piccommands.SetACTemp(Status.ac.temp_code))
             self.update_controls()
             self.start_update_timer()
 
@@ -134,7 +120,7 @@ class LightControl(BoxLayout):
             self.remove_widget(self.control)
         self.ids.name.text = self.light.name
         self.control = \
-            Dimmer() if self.light.type == Light.TYPE_DIMMER else OnOff()
+            Dimmer() if self.light.type == Light.Types.dimmer else OnOff()
         self.add_widget(self.control)
 
     def update_value(self, value):
