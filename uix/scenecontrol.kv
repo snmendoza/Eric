@@ -1,0 +1,10 @@
+<SceneControl>:
+        size_hint_y: None
+        Button:
+                id: select_scene
+                text: 'Select scene'
+                on_release: root.dropdown.open(self)
+        Button:
+                id: record_scene
+                text: 'Record'
+                on_release: root.record_scene()

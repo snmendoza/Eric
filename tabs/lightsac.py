@@ -5,18 +5,17 @@ from appconnections import PICConnection
 from appevents import Events
 from appstatus import Status
 from commands import piccommands
-from kivy.clock import Clock
-from kivy.properties import ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.dropdown import DropDown
+from kivy.lang import Builder
 from kivy.uix.recycleview import RecycleView
-from kivy.uix.slider import Slider
-from kivy.uix.togglebutton import ToggleButton
 from models.ac import AC
 from models.light import Light
+import os
 from threading import Timer
 from uix.mytabbedpanel import MyTabbedPanelItem
+from uix.scenecontrol import SceneControl
+
+path = os.path.dirname(os.path.realpath(__file__))
+Builder.load_file(os.path.join(path, 'lightsac.kv'))
 
 
 class LightsAC(MyTabbedPanelItem):
@@ -105,102 +104,3 @@ class LightsRV(RecycleView):
 
     def __init__(self, **kwargs):
         super(LightsRV, self).__init__(**kwargs)
-
-
-class LightControl(BoxLayout):
-
-    light = ObjectProperty()
-
-    def __init__(self, **kwargs):
-        super(LightControl, self).__init__(**kwargs)
-        self.control = None
-
-    def on_light(self, instance, value):
-        if self.control:
-            self.remove_widget(self.control)
-        self.ids.name.text = self.light.name
-        self.control = \
-            Dimmer() if self.light.type == Light.Types.dimmer else OnOff()
-        self.add_widget(self.control)
-
-    def update_value(self, value):
-        self.control.update_value(self.light.value)
-
-    def set_bright(self):
-        if Config.ready:
-            PICConnection.send_command(piccommands.SetBright(
-                [light.value for light in Config.lights]))
-            Events.on_control_change()
-
-
-class Dimmer(Slider):
-
-    def update_value(self, value):
-        self.value = value
-
-    def set_bright(self):
-        self.parent.light.set_value(self.value)
-        self.parent.set_bright()
-
-
-class OnOff(ToggleButton):
-
-    def update_value(self, value):
-        self.state = 'down' if value else 'normal'
-
-    def set_bright(self):
-        self.parent.light.set_value(100 if self.state == 'down' else 0)
-        self.parent.set_bright()
-
-
-class ACPower(ToggleButton):
-
-    def __init__(self, **kwargs):
-        super(ACPower, self).__init__(**kwargs)
-        self.clock = None
-        self.status = None
-
-    def update_status(self, status):
-        if self.status != status:
-            self.status = status
-            if self.clock:
-                self.clock.cancel()
-            if status == AC.Status.on:
-                self.disabled = False
-                self.state = 'down'
-            elif status == AC.Status.off:
-                self.disabled = False
-                self.state = 'normal'
-            else:
-                self.disabled = True
-                self.clock = Clock.schedule_interval(self.toggle, .25)
-
-    def toggle(self, dt):
-        self.state = 'normal' if self.state == 'down' else 'down'
-
-
-class SceneControl(BoxLayout):
-
-    class SceneButton(Button):
-
-        scene = ObjectProperty()
-
-    def __init__(self, **kwargs):
-        super(SceneControl, self).__init__(**kwargs)
-        self.dropdown = DropDown()
-        self.scene = None
-        for scene in Light.Scenes:
-            btn = self.SceneButton(
-                scene=scene, text=scene.name, size_hint_y=None)
-            btn.bind(on_release=lambda btn: self.select_scene(btn.scene))
-            self.dropdown.add_widget(btn, 1)
-
-    def select_scene(self, scene):
-        self.scene = scene
-        self.ids.select_scene.text = scene.name
-        self.dropdown.dismiss()
-
-    def record_scene(self):
-        if self.scene:
-            PICConnection.send_command(
-                piccommands.RecordLightScene(self.scene.value))
