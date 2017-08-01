@@ -1,0 +1,50 @@
+<Music>:
+        text: 'Música'
+        BoxLayout:
+                RecycleView:
+                        id: categories_rv
+                        viewclass: 'ToggleButton'
+                        RecycleBoxLayout:
+                                orientation: 'vertical'
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 2
+                        BoxLayout:
+                                AsyncImage:
+                                BoxLayout:
+                                        orientation: 'vertical'
+                                        size_hint_x: 2
+                                        Label:
+                                                text: 'Artista'
+                                        Label:
+                                                text: 'Álbum'
+                                        Label:
+                                                text: 'Título'
+                                        BoxLayout:
+                                                Label:
+                                                        size_hint_x: None
+                                                        text: '--:--'
+                                                Slider:
+                                                Label:
+                                                        size_hint_x: None
+                                                        text: '--:--'
+                        BoxLayout:
+                                Button:
+                                        text: 'Play/Pause'
+                                        on_release: root.play_pause()
+                                Button:
+                                        text: 'Prev'
+                                        on_release: root.prev()
+                                Button:
+                                        text: 'Stop'
+                                        on_release: root.stop()
+                                Button:
+                                        text: 'Next'
+                                        on_release: root.next()
+                                Button:
+                                        text: 'Mute'
+                                        on_release: root.mute_unmute()
+                                Slider:
