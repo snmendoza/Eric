@@ -15,29 +15,32 @@
                         BoxLayout:
                                 AsyncImage:
                                         id: albumart
+                                        image: root.DEF_ALBUMART
                                 BoxLayout:
                                         orientation: 'vertical'
                                         size_hint_x: 2
                                         Label:
                                                 id: artist
-                                                text: 'Artista'
+                                                text: root.DEF_ARTIST
                                         Label:
                                                 id: album
-                                                text: 'Álbum'
+                                                text: root.DEF_ALBUM
                                         Label:
                                                 id: title
-                                                text: 'Título'
+                                                text: root.DEF_TITLE
                                         BoxLayout:
                                                 Label:
                                                         id: elapsed
                                                         size_hint_x: None
-                                                        text: '--:--'
+                                                        text: root.DEF_TIME
                                                 Slider:
                                                         id: time
+                                                        on_release: \
+                                                                root.set_elapsed(self.value)
                                                 Label:
                                                         id: remaining
                                                         size_hint_x: None
-                                                        text: '--:--'
+                                                        text: root.DEF_TIME
                         BoxLayout:
                                 Button:
                                         id: play_pause
@@ -58,3 +61,4 @@
                                         on_release: root.mute_unmute()
                                 Slider:
                                         id: volume
+                                        on_move: root.set_volume(self.value)
