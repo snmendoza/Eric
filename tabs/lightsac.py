@@ -49,15 +49,18 @@ class LightsAC(MyTabbedPanelItem):
                 self.ids.lights_layout.remove_widget(self.scene_control)
                 self.scene_control = None
 
-    def update_controls(self, command=None):
+    def update_controls(self):
         if self.can_update:
             for light_control in self.ids.lights_rv.layout_manager.children:
                 light_control.update_value(
                     Status.lights[light_control.light.number].value)
-            self.ids.ac_power.update_status(Status.ac.status)
-            self.ids.ac_temp.text = str(Status.ac.temp) + '°C'
-            self.ids.ac_status.text = Status.ac.status_label
-            self.ids.ac_mode.text = Status.ac.mode
+            self.update_ac_controls()
+
+    def update_ac_controls(self):
+        self.ids.ac_power.update_status(Status.ac.status)
+        self.ids.ac_temp.text = str(Status.ac.temp) + '°C'
+        self.ids.ac_status.text = Status.ac.status_label
+        self.ids.ac_mode.text = Status.ac.mode
 
     def enable_update(self):
         self.can_update = True
@@ -76,7 +79,7 @@ class LightsAC(MyTabbedPanelItem):
         elif Status.ac.status == AC.Status.on:
             Status.ac.set_status(AC.Status.turning_off.value)
             PICConnection.send_command(piccommands.ACOff())
-        self.update_controls()
+        self.update_ac_controls()
         self.start_update_timer()
 
     def ac_temp(self, direction):
@@ -87,5 +90,5 @@ class LightsAC(MyTabbedPanelItem):
             }[direction]()
             PICConnection.send_command(
                 piccommands.SetACTemp(Status.ac.temp_code))
-            self.update_controls()
+            self.update_ac_controls()
             self.start_update_timer()

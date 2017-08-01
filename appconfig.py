@@ -30,6 +30,12 @@ class ConfigParser(object):
                 self.lights = []
                 for idx, light in enumerate(config['lights']):
                     self.lights.append(Light(light['name'], idx, light['type']))
+                self.md5hash = md5hash
+                if not self.ready:
+                    self.ready = True
+                    Events.on_config_ready()
+                else:
+                    Events.on_config_update()
         except IOError:
             Logger.error(__name__ + ': config.json cannot be opened')
             return False
@@ -43,12 +49,6 @@ class ConfigParser(object):
             return False
         else:
             config_file.close()
-            self.md5hash = md5hash
-            if not self.ready:
-                self.ready = True
-                Events.on_config_ready()
-            else:
-                Events.on_config_update()
             return True
 
 

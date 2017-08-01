@@ -44,9 +44,13 @@ class LightControl(BoxLayout):
 
 class Dimmer(Slider):
 
-    def set_bright(self):
-        self.parent.light.set_value(self.value)
-        self.parent.set_bright()
+    def on_touch_up(self, touch):
+        super(Dimmer, self).on_touch_up(touch)
+        if touch.grab_current is self:
+            self.parent.light.set_value(self.value)
+            self.parent.set_bright()
+            touch.ungrab(self)
+            return True
 
 
 class OnOff(ToggleButton):
