@@ -1,9 +1,8 @@
-from appconfig import Config
 from appconnections import PICConnection
-from appevents import Events
+from appstatus import Status
 from commands import piccommands
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty
+from kivy.properties import NumericProperty, ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.slider import Slider
 from kivy.uix.togglebutton import ToggleButton
@@ -20,6 +19,7 @@ class LightControl(BoxLayout):
 
     def __init__(self, **kwargs):
         super(LightControl, self).__init__(**kwargs)
+        self.register_event_type('on_set_bright')
         self.control = None
 
     def on_light(self, instance, value):
@@ -31,19 +31,18 @@ class LightControl(BoxLayout):
         self.add_widget(self.control)
 
     def update_value(self, value):
-        self.control.update_value(self.light.value)
+        self.control.value = value
 
     def set_bright(self):
-        if Config.ready:
-            PICConnection.send_command(piccommands.SetBright(
-                [light.value for light in Config.lights]))
-            Events.on_control_change()
+        self.dispatch('on_set_bright')
+        PICConnection.send_command(piccommands.SetBright(
+             [light.value for light in Status.lights]))
+
+    def on_set_bright(self):
+        pass
 
 
 class Dimmer(Slider):
-
-    def update_value(self, value):
-        self.value = value
 
     def set_bright(self):
         self.parent.light.set_value(self.value)
@@ -52,7 +51,9 @@ class Dimmer(Slider):
 
 class OnOff(ToggleButton):
 
-    def update_value(self, value):
+    value = NumericProperty()
+
+    def on_value(self, instance, value):
         self.state = 'down' if value else 'normal'
 
     def set_bright(self):

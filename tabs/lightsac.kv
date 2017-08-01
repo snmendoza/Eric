@@ -7,11 +7,10 @@
                 BoxLayout:
                         id: lights_layout
                         orientation: 'vertical'
-                        LightsRV:
+                        RecycleView:
                                 id: lights_rv
                                 viewclass: 'LightControl'
                                 RecycleBoxLayout:
-                                        id: lights_rv_layout
                                         default_size_hint: 1, None
                                         size_hint_y: None
                                         height: self.minimum_height
@@ -27,13 +26,13 @@
                         BoxLayout:
                                 Button:
                                         text: '-'
-                                        on_release: root.ac_temp_down()
+                                        on_release: root.ac_temp('down')
                                 Label:
                                         id: ac_temp
                                         text: '----'
                                 Button:
                                         text: '+'
-                                        on_release: root.ac_temp_up()
+                                        on_release: root.ac_temp('up')
                         BoxLayout:
                                 Label:
                                         text: 'Estado:'
