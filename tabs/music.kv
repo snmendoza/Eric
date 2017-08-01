@@ -14,25 +14,33 @@
                         size_hint_x: 2
                         BoxLayout:
                                 AsyncImage:
+                                        id: albumart
                                 BoxLayout:
                                         orientation: 'vertical'
                                         size_hint_x: 2
                                         Label:
+                                                id: artist
                                                 text: 'Artista'
                                         Label:
+                                                id: album
                                                 text: 'Álbum'
                                         Label:
+                                                id: title
                                                 text: 'Título'
                                         BoxLayout:
                                                 Label:
+                                                        id: elapsed
                                                         size_hint_x: None
                                                         text: '--:--'
                                                 Slider:
+                                                        id: time
                                                 Label:
+                                                        id: remaining
                                                         size_hint_x: None
                                                         text: '--:--'
                         BoxLayout:
                                 Button:
+                                        id: play_pause
                                         text: 'Play/Pause'
                                         on_release: root.play_pause()
                                 Button:
@@ -45,6 +53,8 @@
                                         text: 'Next'
                                         on_release: root.next()
                                 Button:
+                                        id: mute_unmute
                                         text: 'Mute'
                                         on_release: root.mute_unmute()
                                 Slider:
+                                        id: volume
