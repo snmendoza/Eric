@@ -1,7 +1,7 @@
 from appevents import Events
 
 
-class MusicPlayer(object):
+class Player(object):
 
     categories = []
     category = None
@@ -27,7 +27,7 @@ class MusicPlayer(object):
     def prev(self):
         Events.on_music_player_update()
 
-    def set_elapsed(self):
+    def set_elapsed(self, elapsed):
         Events.on_music_player_update()
 
     def set_categories(self, categories):
@@ -41,3 +41,6 @@ class MusicPlayer(object):
                 self.play()
                 return
         self.category = None
+
+
+MusicPlayer = Player()

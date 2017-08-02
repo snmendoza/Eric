@@ -13,6 +13,7 @@ Builder.load_file(os.path.join(path, 'music.kv'))
 
 class Music(MyTabbedPanelItem):
 
+    DEF_ALBUMART = 'images/albumart.png'
     DEF_ARTIST = 'Artista'
     DEF_ALBUM = 'Álbum'
     DEF_TITLE = 'Título'
@@ -53,13 +54,14 @@ class Music(MyTabbedPanelItem):
     def update_song(self):
         self.song = MusicPlayer.song
         if self.song:
-            self.ids.albumart.image = self.song.image
+            self.ids.albumart.source = \
+                getattr(self.song, 'albumart', self.DEF_ALBUMART)
             self.ids.artist.text = self.song.artist
             self.ids.album.text = self.song.album
             self.ids.title.text = self.song.title
             self.ids.time.max = self.song.duration
         else:
-            self.ids.albumart.image = self.DEF_ALBUMART
+            self.ids.albumart.source = self.DEF_ALBUMART
             self.ids.artist.text = self.DEF_ARTIST
             self.ids.album.text = self.DEF_ALBUM
             self.ids.title.text = self.DEF_TITLE
@@ -67,9 +69,14 @@ class Music(MyTabbedPanelItem):
 
     def update_player_controls(self):
         self.ids.play_pause.set_state(MusicPlayer.playing)
-        self.ids.elapsed = self.format_time(MusicPlayer.elapsed)
-        self.ids.remaining = self.format_time(MusicPlayer.remaining)
-        self.ids.time = MusicPlayer.elapsed
+        if self.song:
+            self.ids.elapsed.text = self.format_time(MusicPlayer.elapsed)
+            self.ids.remaining.text = self.format_time(MusicPlayer.remaining)
+            self.ids.time = MusicPlayer.elapsed
+        else:
+            self.ids.elapsed.text = self.DEF_TIME
+            self.ids.remaining.text = self.DEF_TIME
+            self.ids.time = 0
 
     def update_volume_controls(self):
         self.ids.volume.min = VolumeManager.min
@@ -86,6 +93,9 @@ class Music(MyTabbedPanelItem):
             MusicPlayer.pause()
         else:
             MusicPlayer.play()
+
+    def stop(self):
+        MusicPlayer.stop()
 
     def prev(self):
         MusicPlayer.prev()

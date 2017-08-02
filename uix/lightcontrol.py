@@ -47,11 +47,11 @@ class Dimmer(MySlider):
     def __init__(self, **kwargs):
         super(Dimmer, self).__init__(**kwargs)
         self.max = 100
-        self.bind('on_release', self.set_bright)
+        self.bind(on_release=self.set_bright)
 
-    def set_bright(self):
-            self.parent.light.set_value(self.value)
-            self.parent.set_bright()
+    def set_bright(self, instance):
+        self.parent.light.set_value(self.value)
+        self.parent.set_bright()
 
 
 class OnOff(ToggleButton):
