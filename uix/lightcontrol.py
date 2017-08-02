@@ -4,10 +4,10 @@ from commands import piccommands
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.lang import Builder
-from kivy.uix.slider import Slider
 from kivy.uix.togglebutton import ToggleButton
 from models.light import Light
 import os
+from uix.myslider import MySlider
 
 path = os.path.dirname(os.path.realpath(__file__))
 Builder.load_file(os.path.join(path, 'lightcontrol.kv'))
@@ -42,15 +42,16 @@ class LightControl(BoxLayout):
         pass
 
 
-class Dimmer(Slider):
+class Dimmer(MySlider):
 
-    def on_touch_up(self, touch):
-        super(Dimmer, self).on_touch_up(touch)
-        if touch.grab_current is self:
+    def __init__(self, **kwargs):
+        super(Dimmer, self).__init__(**kwargs)
+        self.max = 100
+        self.bind('on_release', self.set_bright)
+
+    def set_bright(self):
             self.parent.light.set_value(self.value)
             self.parent.set_bright()
-            touch.ungrab(self)
-            return True
 
 
 class OnOff(ToggleButton):
