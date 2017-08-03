@@ -1,4 +1,6 @@
 from appconfig import Config
+from appevents import Events
+from appm3s import M3S, M3SException
 from jobq.job import Job
 
 
@@ -48,4 +50,22 @@ class SendCommand(Job):
             self.on_success()
         else:
             self.on_error()
+        return result
+
+
+class UpdateMusicCategories(Job):
+
+    def __init__(self):
+        super(UpdateMusicCategories, self).__init__(
+            tag=self.__class__.__name__,
+            periodic=True,
+            period=60)
+
+    def run(self):
+        result = True
+        try:
+            categories = M3S.get_music_categories()
+            Events.on_music_categories_update(categories)
+        except M3SException:
+            result = False
         return result

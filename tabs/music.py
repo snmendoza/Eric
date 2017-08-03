@@ -2,7 +2,9 @@
 
 from appevents import Events
 from appplayers import MusicPlayer
+from appqpool import QPool
 from appvolumemanager import VolumeManager
+import jobs
 from kivy.lang import Builder
 import os
 from uix.mytabbedpanel import MyTabbedPanelItem
@@ -23,7 +25,8 @@ class Music(MyTabbedPanelItem):
         super(Music, self).__init__(**kwargs)
         self.category = None
         self.song = None
-        Events.on_music_categories_update += self.update_categories
+        Events.on_config_ready += self.on_config_ready
+        Events.on_music_player_categories_update += self.update_categories
         Events.on_music_player_update += self.player_update
         Events.on_volume_change += self.update_volume_controls
 
@@ -31,6 +34,9 @@ class Music(MyTabbedPanelItem):
         self.update_categories()
         self.update_player_controls()
         self.update_volume_controls()
+
+    def on_config_ready(self):
+        QPool.addJob(jobs.UpdateMusicCategories())
 
     def update_categories(self):
         self.ids.categories_rv.data = map(

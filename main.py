@@ -1,6 +1,7 @@
 from appconfig import Config
 from appconnections import PICConnection, SGHConnection
 from appevents import Events
+from appm3s import M3S
 from appqpool import QPool
 from appstatus import Status
 from commands import piccommands
@@ -17,7 +18,7 @@ class EricApp(App):
 
     def on_start(self):
         Events.on_config_ready += self.on_config_ready
-        Events.on_config_update += self.set_tv_remote_code
+        Events.on_config_update += self.on_config_update
         Events.on_status_config_update += self.record_light_types
         QPool.addJob(jobs.UpdateConfig())
 
@@ -26,6 +27,11 @@ class EricApp(App):
         QPool.addJob(jobs.Connection(SGHConnection))
         self.start_status_update()
         self.set_tv_remote_code()
+        self.set_m3s_host()
+
+    def on_config_update(self):
+        self.set_tv_remote_code()
+        self.set_m3s_host()
 
     def start_status_update(self):
         PICConnection.send_command(
@@ -36,6 +42,9 @@ class EricApp(App):
             piccommands.SetTVRemoteCode(Config.tv_remote_code),
             retry=True,
             period=5)
+
+    def set_m3s_host(self):
+        M3S.host = Config.m3s_address
 
     def record_light_types(self):
         PICConnection.send_command(

@@ -9,6 +9,10 @@ class MusicPlayer(BasePlayer):
     songs = []
     song = None
 
+    def __init__(self):
+        super(MusicPlayer, self).__init__()
+        Events.on_music_categories_update += self.set_categories
+
     def play(self):
         super(MusicPlayer, self).play()
         Events.on_music_player_update()
@@ -33,7 +37,7 @@ class MusicPlayer(BasePlayer):
 
     def set_categories(self, categories):
         self.categories = categories
-        Events.on_music_categories_update()
+        Events.on_music_player_categories_update()
 
     def set_category(self, category):
         for saved_category in self.categories:
