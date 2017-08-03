@@ -26,6 +26,8 @@ class ConfigParser(object):
                 self.sgh_address = config['sgh_address']
                 self.sgh_port = config['sgh_port']
                 self.pic_address = config['pic_address']
+                self.audio_mixer = config['audio_mixer']
+                self.audio_device = config['audio_device']
                 self.tv_remote_code = config['tv_remote_code']
                 self.lights = []
                 for idx, light in enumerate(config['lights']):

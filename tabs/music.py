@@ -82,6 +82,7 @@ class Music(MyTabbedPanelItem):
         self.ids.volume.min = VolumeManager.min
         self.ids.volume.max = VolumeManager.max
         self.ids.volume.step = VolumeManager.step
+        self.ids.volume.value = VolumeManager.volume
         self.ids.mute_unmute.set_state(VolumeManager.muted)
 
     def format_time(self, seconds):

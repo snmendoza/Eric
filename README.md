@@ -8,6 +8,7 @@ Requirements
 
 * Kivy 1.10.0. See [installation instructions](https://kivy.org/docs/installation/installation.html).
 * Pip packages listed on requirements.txt
+* ALSA development headers
 
 Configuration
 -------------

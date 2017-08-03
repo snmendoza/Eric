@@ -5,6 +5,8 @@
 	"sgh_address": "192.168.0.20",
 	"sgh_port": 3001,
 	"pic_address": "192.168.0.201",
+	"audio_mixer": "Master",
+	"audio_device": "hw:0",
 	"tv_remote_code": 1,
 	"lights": [
 		{
