@@ -67,5 +67,25 @@ class UpdateMusicCategories(Job):
             categories = M3S.get_music_categories()
             Events.on_music_categories_update(categories)
         except M3SException:
+            Events.on_music_categories_update([])
+            result = False
+        return result
+
+
+class UpdateSongs(Job):
+
+    def __init__(self, category):
+        super(UpdateSongs, self).__init__(
+            tag=self.__class__.__name__,
+            single_instance=True)
+        self.category = category
+
+    def run(self):
+        result = True
+        try:
+            songs = M3S.get_songs(self.category)
+            Events.on_songs_update(songs)
+        except M3SException:
+            Events.on_songs_update([])
             result = False
         return result

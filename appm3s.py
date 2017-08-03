@@ -9,5 +9,8 @@ class M3SAPI(object):
     def get_music_categories(self):
         return []
 
+    def get_songs(self, category):
+        return []
+
 
 M3S = M3SAPI()

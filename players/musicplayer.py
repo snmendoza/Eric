@@ -1,5 +1,8 @@
 from appevents import Events
+from appqpool import QPool
+import jobs
 from players.baseplayer import BasePlayer
+import random
 
 
 class MusicPlayer(BasePlayer):
@@ -12,6 +15,7 @@ class MusicPlayer(BasePlayer):
     def __init__(self):
         super(MusicPlayer, self).__init__()
         Events.on_music_categories_update += self.set_categories
+        Events.on_songs_update += self.set_songs
 
     def play(self):
         super(MusicPlayer, self).play()
@@ -43,6 +47,10 @@ class MusicPlayer(BasePlayer):
         for saved_category in self.categories:
             if saved_category.id == category.id:
                 self.category = category
-                self.play()
+                QPool.addJob(jobs.UpdateSongs(self.category))
                 return
         self.category = None
+
+    def set_songs(self, songs):
+        self.songs = random.shuffle(songs)
+        self.play()
