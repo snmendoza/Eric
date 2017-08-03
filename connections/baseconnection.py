@@ -47,7 +47,7 @@ class BaseConnection(object):
             while True:
                 data = self.socket.recv(1024)
                 if not data:
-                    Logger.warning(': No data received from ' +
+                    Logger.warning(__name__ + ': No data received from ' +
                                    self.address + ':' + str(self.port))
                     break
                 self.read_data(data)

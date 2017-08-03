@@ -45,6 +45,7 @@ class EricApp(App):
 
     def set_m3s_host(self):
         M3S.host = Config.m3s_address
+        QPool.addJob(jobs.UpdateMusicCategories())
 
     def record_light_types(self):
         PICConnection.send_command(

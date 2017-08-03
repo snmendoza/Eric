@@ -11,6 +11,9 @@ class CategoryButton(ToggleButton):
         super(CategoryButton, self).__init__(**kwargs)
         self.group = 'categories'
 
+    def on_category(self, instance, value):
+        self.text = self.category.title
+
     def on_release(self):
         if self.state == 'down':
             MusicPlayer.set_category(self.category)
