@@ -84,8 +84,8 @@ class UpdateSongs(Job):
         result = True
         try:
             songs = M3S.get_songs(self.category)
-            Events.on_songs_update(songs)
+            Events.on_songs_update(self.category, songs)
         except M3SException:
-            Events.on_songs_update([])
+            Events.on_songs_update(self.category, [])
             result = False
         return result
