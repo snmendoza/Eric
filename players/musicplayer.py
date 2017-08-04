@@ -1,7 +1,9 @@
+from appconnections import PICConnection
 from appevents import Events
 from appqpool import QPool
 import jobs
 from players.baseplayer import BasePlayer
+from commands import piccommands
 import random
 
 
@@ -16,6 +18,7 @@ class MusicPlayer(BasePlayer):
         super(MusicPlayer, self).__init__()
         Events.on_music_categories_update += self.set_categories
         Events.on_songs_update += self.set_songs
+        Events.on_pic_intro += self.on_pic_intro
 
     def play(self):
         if self.loaded:
@@ -29,16 +32,19 @@ class MusicPlayer(BasePlayer):
             self.category = self.categories[0]
             self.play()
         Events.on_music_player_update()
+        PICConnection.send_command(piccommands.SetAudio(True))
 
     def pause(self):
         super(MusicPlayer, self).pause()
         Events.on_music_player_update()
+        PICConnection.send_command(piccommands.SetAudio(False))
 
     def stop(self):
         super(MusicPlayer, self).stop()
         self.category = None
         self.song = None
         Events.on_music_player_update()
+        PICConnection.send_command(piccommands.SetAudio(False))
 
     def set_elapsed(self, seconds):
         super(MusicPlayer, self).set_elapsed(seconds)
@@ -92,3 +98,6 @@ class MusicPlayer(BasePlayer):
         self.song = None
         Events.on_music_player_update()
         self.next()
+
+    def on_pic_intro(self, command):
+        self.play()
