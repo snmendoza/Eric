@@ -26,8 +26,6 @@ class MusicPlayer(BasePlayer):
         elif self.song:
             self.set_source(self.song.url)
             super(MusicPlayer, self).play()
-        elif self.category:
-            self.next()
         elif self.categories:
             self.category = self.categories[0]
             self.play()
@@ -52,21 +50,23 @@ class MusicPlayer(BasePlayer):
 
     def next(self):
         super(MusicPlayer, self).stop()
-        idx = self.songs.index(self.song)
-        self.song = None
-        Events.on_music_player_update()
-        next_idx = idx + 1 if idx < len(self.songs) else 0
-        self.song = self.songs(next_idx)
-        self.play()
+        if self.songs:
+            idx = self.songs.index(self.song) if self.song else -1
+            self.song = None
+            Events.on_music_player_update()
+            next_idx = idx + 1 if idx < len(self.songs) else 0
+            self.song = self.songs(next_idx)
+            self.play()
 
     def prev(self):
         super(MusicPlayer, self).stop()
-        idx = self.songs.index(self.song)
-        self.song = None
-        Events.on_music_player_update()
-        prev_idx = idx - 1 if idx > 0 else len(self.song) - 1
-        self.song = self.songs(prev_idx)
-        self.play()
+        if self.songs:
+            idx = self.songs.index(self.song) if self.song else 1
+            self.song = None
+            Events.on_music_player_update()
+            prev_idx = idx - 1 if idx > 0 else len(self.song) - 1
+            self.song = self.songs(prev_idx)
+            self.play()
 
     def set_categories(self, categories):
         self.categories = categories
@@ -85,7 +85,7 @@ class MusicPlayer(BasePlayer):
     def set_songs(self, category, songs):
         if category.id == self.category.id:
             self.songs = random.shuffle(songs)
-            self.play()
+            self.next()
 
     def on_playback_completed(self):
         super(MusicPlayer, self).on_playback_completed()
