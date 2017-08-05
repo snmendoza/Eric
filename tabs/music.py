@@ -59,13 +59,11 @@ class Music(MyTabbedPanelItem):
             self.ids.artist.text = self.song.artist
             self.ids.album.text = self.song.album
             self.ids.title.text = self.song.title
-            self.ids.time.max = MusicPlayer.duration
         else:
             self.ids.albumart.source = self.DEF_ALBUMART
             self.ids.artist.text = self.DEF_ARTIST
             self.ids.album.text = self.DEF_ALBUM
             self.ids.title.text = self.DEF_TITLE
-            self.ids.time.max = 0
 
     def update_player_controls(self):
         self.ids.play_pause.set_state(MusicPlayer.playing)
@@ -74,10 +72,12 @@ class Music(MyTabbedPanelItem):
             self.ids.remaining.text = self.format_time(
                 MusicPlayer.duration - MusicPlayer.elapsed)
             self.ids.time.value = MusicPlayer.elapsed
+            self.ids.time.max = MusicPlayer.duration
         else:
             self.ids.elapsed.text = self.DEF_TIME
             self.ids.remaining.text = self.DEF_TIME
             self.ids.time.value = 0
+            self.ids.time.max = 0
 
     def update_volume_controls(self):
         self.ids.volume.min = VolumeManager.min

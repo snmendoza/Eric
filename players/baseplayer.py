@@ -19,7 +19,6 @@ class BasePlayer(object):
             if self.sound:
                 self.sound.bind(on_play=self.on_play)
                 self.sound.bind(on_stop=self.on_stop)
-                self.duration = int(round(self.sound.length))
                 self.loaded = True
             else:
                 self.on_playback_error()
@@ -74,4 +73,5 @@ class BasePlayer(object):
         self.stop()
 
     def on_playback_update(self, dt):
+        self.duration = int(round(self.sound.length))
         self.elapsed = int(round(self.sound.get_pos()))
