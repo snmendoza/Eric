@@ -40,6 +40,8 @@
                                                 MySlider:
                                                         id: time
                                                         on_release: root.set_elapsed(self.value)
+                                                        on_move: root.preview_elapsed(self.value)
+                                                        on_press: root.preview_elapsed(self.value)
                                                 Label:
                                                         id: remaining
                                                         size_hint_x: None

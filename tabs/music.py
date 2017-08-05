@@ -23,6 +23,7 @@ class Music(MyTabbedPanelItem):
         super(Music, self).__init__(**kwargs)
         self.category = None
         self.song = None
+        self.update_time = True
         Events.on_music_player_categories_update += self.update_categories
         Events.on_music_player_update += self.player_update
         Events.on_volume_change += self.update_volume_controls
@@ -67,13 +68,13 @@ class Music(MyTabbedPanelItem):
 
     def update_player_controls(self):
         self.ids.play_pause.set_state(MusicPlayer.playing)
-        if self.song:
+        if self.song and self.update_time:
             self.ids.elapsed.text = self.format_time(MusicPlayer.elapsed)
             self.ids.remaining.text = self.format_time(
                 MusicPlayer.duration - MusicPlayer.elapsed)
             self.ids.time.value = MusicPlayer.elapsed
             self.ids.time.max = MusicPlayer.duration
-        else:
+        elif not self.song:
             self.ids.elapsed.text = self.DEF_TIME
             self.ids.remaining.text = self.DEF_TIME
             self.ids.time.value = 0
@@ -106,7 +107,15 @@ class Music(MyTabbedPanelItem):
         MusicPlayer.next()
 
     def set_elapsed(self, seconds):
+        self.update_time = True
         MusicPlayer.set_elapsed(seconds)
+
+    def preview_elapsed(self, seconds):
+        self.update_time = False
+        seconds = int(round(seconds))
+        self.ids.elapsed.text = self.format_time(seconds)
+        self.ids.remaining.text = self.format_time(
+            self.ids.time.max - seconds)
 
     def mute_unmute(self):
         if VolumeManager.muted:
