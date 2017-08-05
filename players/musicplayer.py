@@ -100,3 +100,7 @@ class MusicPlayer(BasePlayer):
 
     def on_pic_intro(self, command):
         self.play()
+
+    def on_playback_update(self, dt):
+        super(MusicPlayer, self).on_playback_update(dt)
+        Events.on_music_player_update()
