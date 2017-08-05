@@ -27,8 +27,7 @@ class MusicPlayer(BasePlayer):
             self.set_source(self.song.url)
             super(MusicPlayer, self).play()
         elif self.categories:
-            self.category = self.categories[0]
-            self.play()
+            self.set_category(self.categories[0])
         Events.on_music_player_update()
         PICConnection.send_command(piccommands.SetAudio(True))
 
@@ -51,21 +50,20 @@ class MusicPlayer(BasePlayer):
     def next(self):
         super(MusicPlayer, self).stop()
         if self.songs:
-            idx = self.songs.index(self.song) if self.song else -1
+            idx = self.songs.index(self.song) \
+                if self.song else len(self.songs) - 1
             self.song = None
             Events.on_music_player_update()
-            next_idx = idx + 1 if idx < len(self.songs) else 0
-            self.song = self.songs(next_idx)
+            self.song = self.songs[(idx + 1) % len(self.songs)]
             self.play()
 
     def prev(self):
         super(MusicPlayer, self).stop()
         if self.songs:
-            idx = self.songs.index(self.song) if self.song else 1
+            idx = self.songs.index(self.song) if self.song else 0
             self.song = None
             Events.on_music_player_update()
-            prev_idx = idx - 1 if idx > 0 else len(self.song) - 1
-            self.song = self.songs(prev_idx)
+            self.song = self.songs[(idx - 1) % len(self.songs)]
             self.play()
 
     def set_categories(self, categories):
@@ -73,7 +71,7 @@ class MusicPlayer(BasePlayer):
         Events.on_music_player_categories_update()
 
     def set_category(self, category):
-        if category.id != self.category:
+        if not self.category or category.id != self.category.id:
             self.songs = []
             for saved_category in self.categories:
                 if saved_category.id == category.id:
@@ -84,7 +82,8 @@ class MusicPlayer(BasePlayer):
 
     def set_songs(self, category, songs):
         if category.id == self.category.id:
-            self.songs = random.shuffle(songs)
+            self.songs = songs
+            random.shuffle(songs)
             self.next()
 
     def on_playback_completed(self):

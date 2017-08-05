@@ -14,9 +14,9 @@ Builder.load_file(os.path.join(path, 'music.kv'))
 class Music(MyTabbedPanelItem):
 
     DEF_ALBUMART = 'images/albumart.png'
-    DEF_ARTIST = 'Artista'
-    DEF_ALBUM = 'Álbum'
-    DEF_TITLE = 'Título'
+    DEF_ARTIST = u'Artista'
+    DEF_ALBUM = u'Álbum'
+    DEF_TITLE = u'Título'
     DEF_TIME = '--:--'
 
     def __init__(self, **kwargs):
@@ -55,28 +55,29 @@ class Music(MyTabbedPanelItem):
         self.song = MusicPlayer.song
         if self.song:
             self.ids.albumart.source = \
-                getattr(self.song, 'albumart', self.DEF_ALBUMART)
+                self.song.albumart_url or self.DEF_ALBUMART
             self.ids.artist.text = self.song.artist
             self.ids.album.text = self.song.album
             self.ids.title.text = self.song.title
-            self.ids.time.max = self.song.duration
+            self.ids.time.max = MusicPlayer.duration
         else:
             self.ids.albumart.source = self.DEF_ALBUMART
             self.ids.artist.text = self.DEF_ARTIST
             self.ids.album.text = self.DEF_ALBUM
             self.ids.title.text = self.DEF_TITLE
-            self.ids.time.max = self.DEF_TIME
+            self.ids.time.max = 0
 
     def update_player_controls(self):
         self.ids.play_pause.set_state(MusicPlayer.playing)
         if self.song:
             self.ids.elapsed.text = self.format_time(MusicPlayer.elapsed)
-            self.ids.remaining.text = self.format_time(MusicPlayer.remaining)
-            self.ids.time = MusicPlayer.elapsed
+            self.ids.remaining.text = self.format_time(
+                MusicPlayer.duration - MusicPlayer.elapsed)
+            self.ids.time.value = MusicPlayer.elapsed
         else:
             self.ids.elapsed.text = self.DEF_TIME
             self.ids.remaining.text = self.DEF_TIME
-            self.ids.time = 0
+            self.ids.time.value = 0
 
     def update_volume_controls(self):
         self.ids.volume.min = VolumeManager.min

@@ -1,13 +1,16 @@
+import urllib
+
+
 class MusicCategory(object):
     pass
 
 
 class Song(object):
 
-    LOADER = {
+    LOADERS = {
         'title': lambda jo: jo['title'],
         'album': lambda jo: jo['album'],
-        'artist': lambda jo: jo['artist'],
-        'url': lambda jo: jo['songUrl'],
-        'albumart_url': lambda jo: jo['albumartUrl'],
+        'artist': lambda jo: jo['author'],
+        'url': lambda jo: urllib.quote(jo['songUrl'], safe=':/'),
+        'albumart_url': lambda jo: urllib.quote(jo['albumartUrl'], safe=':/'),
     }

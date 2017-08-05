@@ -3,6 +3,8 @@ class BasePlayer(object):
     playing = False
     source = None
     loaded = False
+    duration = 0
+    elapsed = 0
 
     def set_source(self, source):
         if self.source != source:
@@ -23,14 +25,14 @@ class BasePlayer(object):
             self.playing = False
             self.source = None
             self.loaded = False
+            self.duration = 0
+            self.elapsed = 0
 
     def set_elapsed(self, seconds):
-        pass
+        self.elapsed = seconds
 
     def on_playback_completed(self):
         self.playing = False
 
     def on_playback_error(self):
-        self.playing = False
-        self.source = None
-        self.loaded = False
+        self.stop()

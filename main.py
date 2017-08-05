@@ -56,5 +56,5 @@ class EricApp(App):
 
 if __name__ == '__main__':
     Logger.info(__name__ + ': Running app')
-    #KivyConfig.set('graphics', 'fullscreen', 'auto')
+    KivyConfig.set('graphics', 'fullscreen', 'auto')
     EricApp().run()
