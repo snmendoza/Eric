@@ -1,2 +1,0 @@
-class MusicCategory(object):
-    pass

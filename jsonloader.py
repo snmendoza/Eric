@@ -11,11 +11,11 @@ def loads(cls, js):
 
 def load_jo(cls, jo):
     obj = cls()
-    loaders = cls.LOADERS if hasattr(cls, 'LOADERS') else get_def_loaders(jo)
-    for attr, loader in loaders.items():
-        setattr(obj, attr, loader(jo))
+    loaders = getattr(cls, 'LOADERS', None)
+    if loaders:
+        for attr, loader in loaders.items():
+            setattr(obj, attr, loader(jo))
+    else:
+        for attr in jo.keys():
+            setattr(obj, attr, jo[attr])
     return obj
-
-
-def get_def_loaders(jo):
-    return {attr: (lambda jo: val) for attr, val in jo.items()}
