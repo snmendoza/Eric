@@ -38,6 +38,8 @@ class BasePlayer(object):
         if self.loaded:
             self.sound.unbind(on_play=self.on_play)
             self.sound.unbind(on_stop=self.on_stop)
+            if self.update_event:
+                self.update_event.cancel()
             self.sound.stop()
             self.sound.unload()
             self.playing = False

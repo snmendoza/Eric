@@ -72,6 +72,7 @@ class MusicPlayer(BasePlayer):
 
     def set_category(self, category):
         if not self.category or category.id != self.category.id:
+            self.stop()
             self.songs = []
             for saved_category in self.categories:
                 if saved_category.id == category.id:
