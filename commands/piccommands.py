@@ -179,3 +179,8 @@ class VideoMute(PICCommand):
 
     def __init__(self):
         super(VideoMute, self).__init__([self.VALUE])
+
+
+class StartAudioMsg(PICCommand):
+    """This command is sent by the PIC"""
+    VALUE = 33
