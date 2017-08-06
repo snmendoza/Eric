@@ -38,7 +38,6 @@ class MusicPlayer(BasePlayer):
 
     def stop(self):
         super(MusicPlayer, self).stop()
-        self.category = None
         self.song = None
         Events.on_music_player_update()
         PICConnection.send_command(piccommands.SetAudio(False))
@@ -48,19 +47,18 @@ class MusicPlayer(BasePlayer):
         Events.on_music_player_update()
 
     def next(self):
-        super(MusicPlayer, self).stop()
+        idx = self.songs.index(self.song) if self.song else len(self.songs) - 1
+        self.stop()
         if self.songs:
-            idx = self.songs.index(self.song) \
-                if self.song else len(self.songs) - 1
             self.song = None
             Events.on_music_player_update()
             self.song = self.songs[(idx + 1) % len(self.songs)]
             self.play()
 
     def prev(self):
-        super(MusicPlayer, self).stop()
+        idx = self.songs.index(self.song) if self.song else 0
+        self.stop()
         if self.songs:
-            idx = self.songs.index(self.song) if self.song else 0
             self.song = None
             Events.on_music_player_update()
             self.song = self.songs[(idx - 1) % len(self.songs)]
@@ -71,14 +69,16 @@ class MusicPlayer(BasePlayer):
         Events.on_music_player_categories_update()
 
     def set_category(self, category):
-        if not self.category or category.id != self.category.id:
+        if not category:
+            self.category = None
+        elif not self.category or category.id != self.category.id:
             self.stop()
             self.songs = []
             for saved_category in self.categories:
                 if saved_category.id == category.id:
                     self.category = category
                     QPool.addJob(jobs.UpdateSongs(self.category))
-                    return
+        else:
             self.category = None
 
     def set_songs(self, category, songs):

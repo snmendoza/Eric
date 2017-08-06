@@ -98,6 +98,7 @@ class Music(MyTabbedPanelItem):
             MusicPlayer.play()
 
     def stop(self):
+        MusicPlayer.set_category(None)
         MusicPlayer.stop()
 
     def prev(self):

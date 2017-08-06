@@ -17,3 +17,7 @@ class CategoryButton(ToggleButton):
     def on_release(self):
         if self.state == 'down':
             MusicPlayer.set_category(self.category)
+            self.disabled = True
+
+    def on_state(self, instance, value):
+        self.disabled = False
