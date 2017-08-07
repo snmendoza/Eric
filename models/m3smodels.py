@@ -14,3 +14,10 @@ class Song(object):
         'url': lambda jo: urllib.quote(jo['songUrl'], safe=':/'),
         'albumart_url': lambda jo: urllib.quote(jo['albumartUrl'], safe=':/'),
     }
+
+
+class AudioMessage(object):
+
+    LOADERS = {
+        'url': lambda jo: jo['audioMessageUrl']
+    }

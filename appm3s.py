@@ -21,6 +21,14 @@ class M3SAPI(object):
             m3smodels.Song,
             self.make_request('api/get-radio-songs', id=category.id))
 
+    def get_audio_msg_url(self, msg):
+        return jsonloader.loads(m3smodels.AudioMessage,
+                                self.make_request(
+                                    'api/get-audio-message',
+                                    key=msg.key,
+                                    room=msg.room,
+                                    suffix=msg.suffix))
+
     def make_request(self, endpoint, **kwargs):
         url = 'http://' + self.host + '/' + endpoint
         try:

@@ -13,12 +13,15 @@ class MusicPlayer(BasePlayer):
     category = None
     songs = []
     song = None
+    resume = False
 
     def __init__(self):
         super(MusicPlayer, self).__init__()
         Events.on_music_categories_update += self.set_categories
         Events.on_songs_update += self.set_songs
         Events.on_pic_intro += self.on_pic_intro
+        Events.on_audio_msg_start += self.on_audio_msg_start
+        Events.on_audio_msg_end += self.on_audio_msg_end
 
     def play(self):
         if self.loaded:
@@ -105,3 +108,11 @@ class MusicPlayer(BasePlayer):
     def on_playback_update(self, dt):
         super(MusicPlayer, self).on_playback_update(dt)
         Events.on_music_player_update()
+
+    def on_audio_msg_start(self):
+        self.resume = self.playing
+        self.pause()
+
+    def on_audio_msg_end(self):
+        if self.resume:
+            self.play()
