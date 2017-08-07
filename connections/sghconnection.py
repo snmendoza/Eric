@@ -59,7 +59,7 @@ class SGHConnection(BaseConnection):
             sghcommands.StartAudioMsg.VALUE: Events.on_sgh_start_audio_msg,
             sghcommands.AccountInfo.VALUE: Events.on_sgh_account_info
         }
-        switcher[command[len(SGHCommand.START)]](command)
+        switcher[command.values[len(SGHCommand.START)]](command)
         Logger.debug(__name__ + ': Received ' + str(command.values))
 
     def on_keep_alive(self, command):

@@ -25,5 +25,5 @@ class PICConnection(BaseConnection):
             piccommands.Intro.VALUE: Events.on_pic_intro,
             piccommands.StartAudioMsg: Events.on_pic_start_audio_msg
         }
-        switcher[command[len(PICCommand.START)]](command)
+        switcher[command.values[len(PICCommand.START)]](command)
         Logger.debug(__name__ + ': Received ' + str(command.values))

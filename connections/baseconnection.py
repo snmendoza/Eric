@@ -93,14 +93,15 @@ class BaseConnection(object):
         QPool.addJob(jobs.SendCommand(self, command, **kwargs))
 
     def read_data(self, data):
-        if self.data or data[:len(BaseCommand.START)] == BaseCommand.START:
+        if self.data or \
+                map(ord, data[:len(BaseCommand.START)]) == BaseCommand.START:
             self.data += map(ord, data)
-            if len(self.data) == self.data_len:
+            if len(self.data) == self.command_len:
                 node_len = self.command_len - len(BaseCommand.START) - \
                     len(BaseCommand.END)
                 params = self.data[len(BaseCommand.START):-len(BaseCommand.END)]
                 self.read_command(BaseCommand(node_len, params))
-            elif len(self.data) > self.data_len:
+            elif len(self.data) > self.command_len:
                 self.data = []
 
     def read_command(self, command):
