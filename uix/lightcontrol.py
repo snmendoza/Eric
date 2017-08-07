@@ -31,6 +31,8 @@ class LightControl(BoxLayout):
         self.add_widget(self.control)
 
     def update_value(self, value):
+        if value == self.control.value:
+            self.control.on_value(self.control, value)
         self.control.value = value
 
     def set_bright(self):
@@ -48,6 +50,9 @@ class Dimmer(MySlider):
         super(Dimmer, self).__init__(**kwargs)
         self.max = 100
         self.bind(on_release=self.set_bright)
+
+    def on_value(self, instance, value):
+        self.value = value
 
     def set_bright(self, instance):
         self.parent.light.set_value(self.value)
