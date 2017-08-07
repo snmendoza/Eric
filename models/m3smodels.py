@@ -1,6 +1,10 @@
 import urllib
 
 
+def quote_url(jo, attr):
+    return urllib.quote(jo[attr], safe=':/') if jo[attr] else None
+
+
 class MusicCategory(object):
     pass
 
@@ -11,8 +15,8 @@ class Song(object):
         'title': lambda jo: jo['title'],
         'album': lambda jo: jo['album'],
         'artist': lambda jo: jo['author'],
-        'url': lambda jo: urllib.quote(jo['songUrl'], safe=':/'),
-        'albumart_url': lambda jo: urllib.quote(jo['albumartUrl'], safe=':/'),
+        'url': lambda jo: quote_url(jo, 'songUrl'),
+        'albumart_url': lambda jo: quote_url(jo, 'albumartUrl')
     }
 
 
