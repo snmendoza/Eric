@@ -46,11 +46,8 @@ class Music(MyTabbedPanelItem):
 
     def update_category(self):
         self.category = MusicPlayer.category
-        for category_btn in self.ids.categories_rv.layout_manager.children:
-            if self.category and category_btn.category.id == self.category.id:
-                category_btn.state = 'down'
-            else:
-                category_btn.state = 'normal'
+        # Refresh the selection state of the category buttons
+        self.ids.categories_rv.refresh_from_data()
 
     def update_song(self):
         self.song = MusicPlayer.song
