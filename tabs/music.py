@@ -24,6 +24,7 @@ class Music(MyTabbedPanelItem):
         self.category = None
         self.song = None
         self.update_time = True
+        self.update_categories_enabled = True
         Events.on_music_player_categories_update += self.update_categories
         Events.on_music_player_update += self.player_update
         Events.on_volume_change += self.update_volume_controls
@@ -34,8 +35,22 @@ class Music(MyTabbedPanelItem):
         self.update_volume_controls()
 
     def update_categories(self):
-        self.ids.categories_rv.data = map(
-            lambda category: {'category': category}, MusicPlayer.categories)
+        if self.update_categories_enabled:
+            self.ids.categories_rv.data = map(
+                lambda category: {
+                    'category': category,
+                    'on_press': self.hold_categories_update,
+                    'on_release': self.resume_categories_update
+                },
+                MusicPlayer.categories)
+
+    def hold_categories_update(self):
+        self.update_categories_enabled = False
+
+    def resume_categories_update(self):
+        self.update_categories_enabled = True
+        # Recycle view data will only be refreshed if categories were updated
+        self.update_categories()
 
     def player_update(self):
         if self.category != MusicPlayer.category:
