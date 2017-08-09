@@ -124,11 +124,12 @@ class Music(MyTabbedPanelItem):
         MusicPlayer.set_elapsed(seconds)
 
     def preview_elapsed(self, seconds):
-        self.update_time = False
-        seconds = int(round(seconds))
-        self.ids.elapsed.text = self.format_time(seconds)
-        self.ids.remaining.text = self.format_time(
-            self.ids.time.max - seconds)
+        if self.song:
+            self.update_time = False
+            seconds = int(round(seconds))
+            self.ids.elapsed.text = self.format_time(seconds)
+            self.ids.remaining.text = self.format_time(
+                self.ids.time.max - seconds)
 
     def mute_unmute(self):
         if VolumeManager.muted:
