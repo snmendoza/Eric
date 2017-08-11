@@ -1,8 +1,10 @@
 from appevents import Events
 import hashlib
+import inspect
 import json
 from kivy.logger import Logger
 from models.light import Light
+import os
 
 
 class ConfigParser(object):
@@ -14,7 +16,9 @@ class ConfigParser(object):
     def read_file(self):
         Logger.debug(__name__ + ': Reading config file')
         try:
-            config_file = open('config.json')
+            script_dir = os.path.dirname(
+                os.path.abspath(inspect.getfile(inspect.currentframe())))
+            config_file = open(script_dir + '/config.json')
             md5hash = hashlib.md5(config_file.read()).hexdigest()
             if self.md5hash != md5hash:
                 Logger.info(__name__ + ': Config file updated')
