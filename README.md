@@ -55,3 +55,15 @@ $ nano config.json
 ```
 $ python ~/eric/main.py
 ```
+* Enable autologin for pi user.
+```
+$ sudo nano /etc/systemd/system/getty.target.wants/getty@tty1.service
+```
+change
+```
+ExecStart=-/sbin/agetty --noclear %I $TERM
+```
+to
+```
+ExecStart=-/sbin/agetty -a pi %I $TERM
+```
