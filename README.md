@@ -29,6 +29,7 @@ Official touch display will be assumed as the input device.
 $ sudo dpkg-reconfigure keyboard-configuration
 ```
 * (Optional) [Set up WiFi](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md).
+* (Optional) [Use a static IP address](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update).
 * (Optional) [Enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/).
 * Update package index and install dependencies.
 ```
