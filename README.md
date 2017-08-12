@@ -67,3 +67,11 @@ to
 ```
 ExecStart=-/sbin/agetty -a pi %I $TERM
 ```
+* Edit .bashrc to execute Eric after login.
+```
+$ nano ~/.bashrc
+```
+add this line at the end of the file
+```
+sh ~/eric/loop.sh
+```
