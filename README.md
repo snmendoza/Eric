@@ -27,6 +27,7 @@ Official touch display will be assumed as the input device.
 * (Optional) Change keyboard layout.
 ```
 $ sudo dpkg-reconfigure keyboard-configuration
+$ sudo reboot
 ```
 * (Optional) [Set up WiFi](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md).
 * (Optional) [Use a static IP address](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update).
