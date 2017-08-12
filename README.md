@@ -51,3 +51,7 @@ $ sudo pip install -r ~/eric/requirements.txt
 $ cp ~/eric/config.json.example ~/eric/config.json
 $ nano config.json
 ```
+* Do a test run.
+```
+$ python ~/eric/main.py
+```
