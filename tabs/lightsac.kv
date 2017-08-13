@@ -2,7 +2,7 @@
 #:import LightControl uix.lightcontrol
 
 <LightsAC>:
-        text: 'Luces/Aire'
+        text: self.LIGHTS_TITLE + self.AC_TITLE
         BoxLayout:
                 BoxLayout:
                         id: lights_layout
@@ -16,6 +16,7 @@
                                         height: self.minimum_height
                                         orientation: 'vertical'
                 BoxLayout:
+                        id: ac_layout
                         orientation: 'vertical'
                         Label:
                                 text: 'Aire'

@@ -33,6 +33,7 @@ class ConfigParser(object):
                 self.audio_mixer = config['audio_mixer']
                 self.audio_device = config['audio_device']
                 self.tv_remote_code = config['tv_remote_code']
+                self.ac_controls = config['ac_controls']
                 self.lights = []
                 for idx, light in enumerate(config['lights']):
                     self.lights.append(Light(light['name'], idx, light['type']))

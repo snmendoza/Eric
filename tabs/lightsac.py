@@ -18,20 +18,23 @@ Builder.load_file(os.path.join(path, 'lightsac.kv'))
 
 class LightsAC(MyTabbedPanelItem):
 
+    LIGHTS_TITLE = 'Luces'
+    AC_TITLE = '/Aire'
+
     def __init__(self, **kwargs):
         super(LightsAC, self).__init__(**kwargs)
         self.lights = []
         self.can_update = True
         self.update_timer = None
         self.scene_control = None
-        Events.on_status_config_update += self.load_light_controls
+        Events.on_status_config_update += self.load_controls
         Events.on_status_update += self.update_controls
 
     def on_selected(self):
         if Config.ready:
-            self.load_light_controls()
+            self.load_controls()
 
-    def load_light_controls(self):
+    def load_controls(self):
         # dimmers go before on off lights
         self.lights = \
             sorted(Status.lights, key=lambda light: light.type.value)
@@ -48,6 +51,10 @@ class LightsAC(MyTabbedPanelItem):
             if self.scene_control:
                 self.ids.lights_layout.remove_widget(self.scene_control)
                 self.scene_control = None
+        # hide ac controls if needed
+        self.ids.ac_layout.size_hint_x = 1 if Config.ac_controls else 0
+        self.text = self.LIGHTS_TITLE + self.AC_TITLE \
+            if Config.ac_controls else self.LIGHTS_TITLE
 
     def update_controls(self):
         if self.can_update:

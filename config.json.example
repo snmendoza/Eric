@@ -8,6 +8,7 @@
 	"audio_mixer": "Master",
 	"audio_device": "hw:0",
 	"tv_remote_code": 1,
+	"ac_controls": true,
 	"lights": [
 		{
 			"name": "Light 1",
