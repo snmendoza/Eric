@@ -7,7 +7,7 @@ class SystemSoundManager(object):
 
     def __init__(self):
         self.min = 0
-        self.max = 0
+        self.max = 100
         self.step = 1
         self.mixer = None
         self.volume = 0
@@ -18,7 +18,6 @@ class SystemSoundManager(object):
     def initialize_mixer(self):
         self.mixer = alsaaudio.Mixer(
             control=Config.audio_mixer, device=Config.audio_device)
-        self.min, self.max = self.mixer.getrange()
         self.update_values()
 
     def mute(self):
