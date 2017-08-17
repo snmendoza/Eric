@@ -38,6 +38,7 @@ class Music(MyTabbedPanelItem):
         if self.update_categories_enabled:
             self.ids.categories_rv.data = map(
                 lambda category: {
+                    'text': category.title,
                     'category': category,
                     'on_press': self.hold_categories_update,
                     'on_release': self.resume_categories_update
@@ -61,8 +62,6 @@ class Music(MyTabbedPanelItem):
 
     def update_category(self):
         self.category = MusicPlayer.category
-        # Refresh the selection state of the category buttons
-        self.ids.categories_rv.refresh_from_data()
 
     def update_song(self):
         self.song = MusicPlayer.song

@@ -75,8 +75,9 @@ class MusicPlayer(BasePlayer):
         if not category:
             self.category = None
         elif not self.category or category.id != self.category.id:
-            self.stop()
+            self.category = None
             self.songs = []
+            self.stop()
             for saved_category in self.categories:
                 if saved_category.id == category.id:
                     self.category = category
