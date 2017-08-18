@@ -24,7 +24,6 @@ class Music(MyTabbedPanelItem):
         self.category = None
         self.song = None
         self.update_time = True
-        self.update_categories_enabled = True
         Events.on_music_player_categories_update += self.update_categories
         Events.on_music_player_update += self.player_update
         Events.on_volume_change += self.update_volume_controls
@@ -35,23 +34,16 @@ class Music(MyTabbedPanelItem):
         self.update_volume_controls()
 
     def update_categories(self):
-        if self.update_categories_enabled:
-            self.ids.categories_rv.data = map(
-                lambda category: {
-                    'text': category.title,
-                    'category': category,
-                    'on_press': self.hold_categories_update,
-                    'on_release': self.resume_categories_update
-                },
-                MusicPlayer.categories)
+        self.ids.categories_rv.data = map(
+            lambda category: {
+                'text': category.title,
+                'on_item_selected': self.set_category
+            },
+            MusicPlayer.categories)
 
-    def hold_categories_update(self):
-        self.update_categories_enabled = False
-
-    def resume_categories_update(self):
-        self.update_categories_enabled = True
-        # Recycle view data will only be refreshed if categories were updated
-        self.update_categories()
+    def set_category(self, index):
+        self.category = MusicPlayer.categories[index]
+        MusicPlayer.set_category(self.category)
 
     def player_update(self):
         if self.category != MusicPlayer.category:
@@ -62,6 +54,15 @@ class Music(MyTabbedPanelItem):
 
     def update_category(self):
         self.category = MusicPlayer.category
+        try:
+            index = MusicPlayer.categories.index(self.category)
+        except ValueError:
+            index = None
+        if index is not None:
+            pass
+            self.ids.categories_rv.layout_manager.select_node(index)
+        else:
+            self.ids.categories_rv.layout_manager.clear_selection()
 
     def update_song(self):
         self.song = MusicPlayer.song

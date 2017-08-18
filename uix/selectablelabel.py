@@ -9,10 +9,17 @@ Builder.load_file(os.path.join(path, 'selectablelabel.kv'))
 
 
 class SelectableLabel(RecycleDataViewBehavior, Label):
-    ''' Add selection support to the Label '''
+
     index = None
     selected = BooleanProperty(False)
     selectable = BooleanProperty(True)
+    activated_from_press = False
+
+    def __init__(self, **kwargs):
+        super(SelectableLabel, self).__init__(**kwargs)
+        self.register_event_type('on_press')
+        self.register_event_type('on_release')
+        self.register_event_type('on_item_selected')
 
     def refresh_view_attrs(self, rv, index, data):
         ''' Catch and handle the view changes '''
@@ -24,12 +31,32 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         if super(SelectableLabel, self).on_touch_down(touch):
             return True
         if self.collide_point(*touch.pos) and self.selectable:
-            return self.parent.select_with_touch(self.index, touch)
+            touch.grab(self)
+            self.dispatch('on_press', self.index)
+            self.activated_from_press = True
+            result = self.parent.select_with_touch(self.index, touch)
+            self.activated_from_press = False
+            return result
+
+    def on_touch_up(self, touch):
+        if super(SelectableLabel, self).on_touch_up(touch):
+            return True
+        if touch.grab_current is self:
+            self.dispatch('on_release', self.index)
+            touch.ungrab(self)
+            return True
 
     def apply_selection(self, rv, index, is_selected):
         ''' Respond to the selection of items in the view. '''
         self.selected = is_selected
-        if is_selected:
-            print("selection changed to {0}".format(rv.data[index]))
-        else:
-            print("selection removed for {0}".format(rv.data[index]))
+        if is_selected and self.activated_from_press:
+            self.dispatch('on_item_selected', self.index)
+
+    def on_press(self, index):
+        pass
+
+    def on_release(self, index):
+        pass
+
+    def on_item_selected(self, index):
+        pass
