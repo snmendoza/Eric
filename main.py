@@ -9,9 +9,13 @@ import jobs
 import kivy
 from kivy.app import App
 from kivy.config import Config as KivyConfig
+from kivy.lang import Builder
 from kivy.logger import Logger
+import os
 
 kivy.require('1.10.0')
+path = os.path.dirname(os.path.realpath(__file__))
+Builder.load_file(os.path.join(path, 'styles.kv'))
 
 
 class EricApp(App):
