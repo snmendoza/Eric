@@ -1,5 +1,6 @@
 #:import hex kivy.utils.get_color_from_hex
 
+# change app background
 <Layout>:
         canvas.before:
                 Color:
@@ -8,3 +9,6 @@
                         pos: self.pos
                         size: self.size
 
+# add padding to tab content
+<TabContentLayout@BoxLayout>:
+        padding: self.height * .01
