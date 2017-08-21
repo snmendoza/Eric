@@ -1,7 +1,9 @@
+#:import hex kivy.utils.get_color_from_hex
+#
 <SelectableLabel>:
         canvas.before:
                 Color:
-                        rgba: (.0, .9, .1, .3) if self.selected else (0, 0, 0, 1)
+                        rgba: hex('#33B5E5') if self.selected else (0, 0, 0, 0)
                 Rectangle:
                         pos: self.pos
                         size: self.size
