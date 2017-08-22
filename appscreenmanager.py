@@ -11,7 +11,7 @@ class RPIScreenManager(object):
         # for RPI 0 is min and 255 is max
         brightness = 255 * brightness / 100
         with open('/sys/class/backlight/rpi_backlight/brightness', 'w') as f:
-            f.write(brightness)
+            f.write(str(brightness))
 
 
 ScreenManager = RPIScreenManager()
