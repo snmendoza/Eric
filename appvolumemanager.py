@@ -9,7 +9,6 @@ class SystemSoundManager(object):
         self.min = 0
         self.max = 100
         self.step = 1
-        self.mixer = None
         self.volume = 0
         self.muted = True
         Events.on_config_ready += self.initialize_mixer
