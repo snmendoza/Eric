@@ -71,7 +71,8 @@ ExecStart=-/sbin/agetty -a pi %I $TERM
 ```
 $ nano ~/.bashrc
 ```
-add this line at the end of the file
+add these lines at the end of the file
 ```
+sudo su -c "chmod a+w /sys/class/backlight/rpi_backlight/bl_power /sys/class/backlight/rpi_backlight/brightness"
 sh ~/eric/loop.sh
 ```
