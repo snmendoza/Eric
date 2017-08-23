@@ -30,6 +30,7 @@ class EricApp(App):
         QPool.addJob(jobs.UpdateConfig())
         # Override window touch functions to implement screensaver
         self.turn_screen_on()
+        self.restart_screensaver_timer()
         Window.bind(on_touch_down=self.on_touch_down,
                     on_touch_move=self.on_touch_move,
                     on_touch_up=self.on_touch_up)
@@ -66,23 +67,22 @@ class EricApp(App):
             period=5)
 
     def turn_screen_on(self):
-        print('on')
         ScreenManager.set_power(True)
         ScreenManager.set_brightness(100)
         self.screen_on = True
-        self.restart_screensaver_timer()
+        self.screen_dimmered = False
 
     def dimmer_screen(self, dt):
-        print('dimmer')
         ScreenManager.set_brightness(25)
+        self.screen_dimmered = True
 
     def turn_screen_off(self, dt):
-        print('off')
         ScreenManager.set_power(False)
         self.screen_on = False
+        self.screen_dimmered = False
 
     def restart_screensaver_timer(self):
-        self.dimmer_trigger = Clock.create_trigger(self.dimmer_screen, 5)
+        self.dimmer_trigger = Clock.create_trigger(self.dimmer_screen, 10)
         self.screen_off_trigger = Clock.create_trigger(self.turn_screen_off, 30)
         self.dimmer_trigger()
         self.screen_off_trigger()
@@ -93,6 +93,8 @@ class EricApp(App):
 
     def on_touch_down(self, instance, touch):
         if self.screen_on:
+            if self.screen_dimmered:
+                self.turn_screen_on()
             self.cancel_screensaver_timer()
             return False
         else:
@@ -107,6 +109,7 @@ class EricApp(App):
             return False
         else:
             self.turn_screen_on()
+            self.restart_screensaver_timer()
             return True
 
 if __name__ == '__main__':
