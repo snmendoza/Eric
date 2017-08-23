@@ -10,7 +10,6 @@ import jobs
 import kivy
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.config import Config as KivyConfig
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.logger import Logger
@@ -34,6 +33,9 @@ class EricApp(App):
         Window.bind(on_touch_down=self.on_touch_down,
                     on_touch_move=self.on_touch_move,
                     on_touch_up=self.on_touch_up)
+
+    def on_stop(self):
+        self.turn_screen_on()
 
     def on_config_ready(self):
         QPool.addJob(jobs.Connection(PICConnection))
@@ -114,5 +116,4 @@ class EricApp(App):
 
 if __name__ == '__main__':
     Logger.info(__name__ + ': Running app')
-    KivyConfig.set('graphics', 'fullscreen', 'auto')
     EricApp().run()
