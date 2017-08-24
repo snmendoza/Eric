@@ -1,6 +1,4 @@
-#:import MyButton uix.mybutton
 #:import MySlider uix.myslider
-#:import MyToggleButton uix.mytogglebutton
 #:import SelectableLabel uix.selectablelabel
 #:import SelectableRecycleBoxLayout uix.selectablerecycleboxlayout
 
@@ -49,20 +47,20 @@
                                                         size_hint_x: None
                                                         text: root.DEF_TIME
                         BoxLayout:
-                                MyToggleButton:
+                                ToggleButtonM:
                                         id: play_pause
                                         text: 'Play/Pause'
                                         on_release: root.play_pause()
-                                MyButton:
+                                ButtonM:
                                         on_release: root.prev()
                                         background: 'images/prev.png'
-                                MyButton:
+                                ButtonM:
                                         on_release: root.stop()
                                         background: 'images/stop.png'
-                                MyButton:
+                                ButtonM:
                                         on_release: root.next()
                                         background: 'images/next.png'
-                                MyToggleButton:
+                                ToggleButtonM:
                                         id: mute_unmute
                                         text: 'Mute'
                                         on_release: root.mute_unmute()

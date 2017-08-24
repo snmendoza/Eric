@@ -4,10 +4,10 @@ from commands import piccommands
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.lang import Builder
-from kivy.uix.togglebutton import ToggleButton
 from models.light import Light
 import os
 from uix.myslider import MySlider
+from uix.mytogglebutton import MyToggleButton
 
 path = os.path.dirname(os.path.realpath(__file__))
 Builder.load_file(os.path.join(path, 'lightcontrol.kv'))
@@ -59,7 +59,7 @@ class Dimmer(MySlider):
         self.parent.set_bright()
 
 
-class OnOff(ToggleButton):
+class OnOff(MyToggleButton):
 
     value = NumericProperty()
 

@@ -1,8 +1,8 @@
 from kivy.clock import Clock
-from kivy.uix.button import Button
+from uix.mybutton import MyButton
 
 
-class RepeatButton(Button):
+class RepeatButton(MyButton):
 
     def __init__(self, **kwargs):
         super(RepeatButton, self).__init__(**kwargs)

@@ -1,9 +1,9 @@
 from kivy.clock import Clock
-from kivy.uix.togglebutton import ToggleButton
 from models.ac import AC
+from uix.mytogglebutton import MyToggleButton
 
 
-class ACPower(ToggleButton):
+class ACPower(MyToggleButton):
 
     def __init__(self, **kwargs):
         super(ACPower, self).__init__(**kwargs)

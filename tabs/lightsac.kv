@@ -25,13 +25,13 @@
                                 text: 'Power'
                                 on_release: root.ac_power()
                         BoxLayout:
-                                Button:
+                                ButtonM:
                                         text: '-'
                                         on_release: root.ac_temp('down')
                                 Label:
                                         id: ac_temp
                                         text: '----'
-                                Button:
+                                ButtonM:
                                         text: '+'
                                         on_release: root.ac_temp('up')
                         BoxLayout:

@@ -1,4 +1,5 @@
 #:import hex kivy.utils.get_color_from_hex
+#:import Window kivy.core.window.Window
 
 # change app background
 <Layout>:
@@ -16,3 +17,25 @@
 # resize images
 <Image>:
         allow_stretch: True
+
+# define button sizes
+<ButtonM@MyButton>:
+        size_hint: None, None
+        height: min(Window.width * .1, Window.height * .1)
+        width: min(Window.width * .1, Window.height * .1)
+<RepeatButtonM@RepeatButton>:
+        size_hint: None, None
+        height: min(Window.width * .1, Window.height * .1)
+        width: min(Window.width * .1, Window.height * .1)
+<ToggleButtonM@MyToggleButton>:
+        size_hint: None, None
+        height: min(Window.width * .1, Window.height * .1)
+        width: min(Window.width * .1, Window.height * .1)
+<OnOff>:
+        size_hint: None, None
+        height: min(Window.width * .1, Window.height * .1)
+        width: min(Window.width * .1, Window.height * .1)
+<ACPower>:
+        size_hint: None, None
+        height: min(Window.width * .1, Window.height * .1)
+        width: min(Window.width * .1, Window.height * .1)
