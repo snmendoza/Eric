@@ -1,3 +1,4 @@
+#:import MyButton uix.mybutton
 #:import MySlider uix.myslider
 #:import MyToggleButton uix.mytogglebutton
 #:import SelectableLabel uix.selectablelabel
@@ -52,15 +53,15 @@
                                         id: play_pause
                                         text: 'Play/Pause'
                                         on_release: root.play_pause()
-                                Button:
-                                        text: 'Prev'
+                                MyButton:
                                         on_release: root.prev()
-                                Button:
-                                        text: 'Stop'
+                                        background: 'images/prev.png'
+                                MyButton:
                                         on_release: root.stop()
-                                Button:
-                                        text: 'Next'
+                                        background: 'images/stop.png'
+                                MyButton:
                                         on_release: root.next()
+                                        background: 'images/next.png'
                                 MyToggleButton:
                                         id: mute_unmute
                                         text: 'Mute'
