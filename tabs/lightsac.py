@@ -52,7 +52,7 @@ class LightsAC(MyTabbedPanelItem):
                 self.ids.lights_layout.remove_widget(self.scene_control)
                 self.scene_control = None
         # hide ac controls if needed
-        self.ids.ac_layout.size_hint_x = 1 if Config.ac_controls else 0
+        self.ids.ac_layout.size_hint_x = .75 if Config.ac_controls else 0
         self.text = self.LIGHTS_TITLE + self.AC_TITLE \
             if Config.ac_controls else self.LIGHTS_TITLE
 

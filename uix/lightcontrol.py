@@ -24,11 +24,11 @@ class LightControl(BoxLayout):
 
     def on_light(self, instance, value):
         if self.control:
-            self.remove_widget(self.control)
+            self.ids.control_layout.remove_widget(self.control)
         self.ids.name.text = self.light.name
         self.control = \
             Dimmer() if self.light.type == Light.Types.dimmer else OnOff()
-        self.add_widget(self.control)
+        self.ids.control_layout.add_widget(self.control)
 
     def update_value(self, value):
         if value == self.control.value:

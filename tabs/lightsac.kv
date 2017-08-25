@@ -15,34 +15,39 @@
                                         size_hint_y: None
                                         height: self.minimum_height
                                         orientation: 'vertical'
-                BoxLayout:
-                        id: ac_layout
-                        orientation: 'vertical'
-                        Label:
-                                text: 'Aire'
-                        ACPower:
-                                id: ac_power
-                                text: 'Power'
-                                on_release: root.ac_power()
+                AnchorLayout:
+                        size_hint_x: .75
                         BoxLayout:
-                                ButtonM:
-                                        text: '-'
-                                        on_release: root.ac_temp('down')
+                                id: ac_layout
+                                orientation: 'vertical'
+                                size_hint: .75, .75
                                 Label:
-                                        id: ac_temp
-                                        text: '----'
-                                ButtonM:
-                                        text: '+'
-                                        on_release: root.ac_temp('up')
-                        BoxLayout:
-                                Label:
-                                        text: 'Estado:'
-                                Label:
-                                        id: ac_status
-                                        text: '----'
-                        BoxLayout:
-                                Label:
-                                        text: 'Modo:'
-                                Label:
-                                        id: ac_mode
-                                        text: '----'
+                                        text: 'Aire'
+                                AnchorLayout:
+                                        ACPower:
+                                                id: ac_power
+                                                text: 'Power'
+                                                on_release: root.ac_power()
+                                BoxLayout:
+                                        ButtonM:
+                                                text: '-'
+                                                on_release: root.ac_temp('down')
+                                        AnchorLayout:
+                                                Label:
+                                                        id: ac_temp
+                                                        text: '----'
+                                        ButtonM:
+                                                text: '+'
+                                                on_release: root.ac_temp('up')
+                                BoxLayout:
+                                        Label:
+                                                text: 'Estado:'
+                                        Label:
+                                                id: ac_status
+                                                text: '----'
+                                BoxLayout:
+                                        Label:
+                                                text: 'Modo:'
+                                        Label:
+                                                id: ac_mode
+                                                text: '----'
