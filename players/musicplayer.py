@@ -93,13 +93,11 @@ class MusicPlayer(BasePlayer):
 
     def on_playback_completed(self):
         super(MusicPlayer, self).on_playback_completed()
-        self.song = None
         Events.on_music_player_update()
         self.next()
 
     def on_playback_error(self):
         super(MusicPlayer, self).on_playback_error()
-        self.song = None
         Events.on_music_player_update()
         self.next()
 
