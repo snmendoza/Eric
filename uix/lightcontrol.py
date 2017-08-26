@@ -55,8 +55,8 @@ class Dimmer(MySlider):
         self.value = value
 
     def set_bright(self, instance):
-        self.parent.light.set_value(self.value)
-        self.parent.set_bright()
+        self.parent.parent.light.set_value(self.value)
+        self.parent.parent.set_bright()
 
 
 class OnOff(MyToggleButton):
@@ -67,5 +67,5 @@ class OnOff(MyToggleButton):
         self.state = 'down' if value else 'normal'
 
     def set_bright(self):
-        self.parent.light.set_value(100 if self.state == 'down' else 0)
-        self.parent.set_bright()
+        self.parent.parent.light.set_value(100 if self.state == 'down' else 0)
+        self.parent.parent.set_bright()
