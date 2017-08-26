@@ -19,7 +19,9 @@ class RepeatButton(MyButton):
         self.lp_fired = True
         self.dispatch('on_repeat')
 
-    def on_release(self):
-        self.clock.cancel()
-        if not self.lp_fired:
-            self.dispatch('on_repeat')
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            self.clock.cancel()
+            if not self.lp_fired:
+                self.dispatch('on_repeat')
+        return super(RepeatButton, self).on_touch_up(touch)

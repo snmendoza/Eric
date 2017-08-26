@@ -93,12 +93,10 @@ class MusicPlayer(BasePlayer):
 
     def on_playback_completed(self):
         super(MusicPlayer, self).on_playback_completed()
-        Events.on_music_player_update()
         self.next()
 
     def on_playback_error(self):
         super(MusicPlayer, self).on_playback_error()
-        Events.on_music_player_update()
         self.next()
 
     def on_pic_intro(self, command):
