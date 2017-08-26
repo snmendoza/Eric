@@ -33,18 +33,18 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         if self.collide_point(*touch.pos) and self.selectable:
             touch.grab(self)
             self.dispatch('on_press', self.index)
-            self.activated_from_press = True
-            result = self.parent.select_with_touch(self.index, touch)
-            self.activated_from_press = False
-            return result
+            return True
 
     def on_touch_up(self, touch):
         if super(SelectableLabel, self).on_touch_up(touch):
             return True
-        if touch.grab_current is self:
+        if touch.grab_current is self and not self.selected:
             self.dispatch('on_release', self.index)
+            self.activated_from_press = True
+            result = self.parent.select_with_touch(self.index, touch)
+            self.activated_from_press = False
             touch.ungrab(self)
-            return True
+            return result
 
     def apply_selection(self, rv, index, is_selected):
         ''' Respond to the selection of items in the view. '''
