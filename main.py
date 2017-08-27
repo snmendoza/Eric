@@ -70,12 +70,12 @@ class EricApp(App):
 
     def turn_screen_on(self):
         ScreenManager.set_power(True)
-        ScreenManager.set_brightness(100)
+        ScreenManager.set_brightness(60)
         self.screen_on = True
         self.screen_dimmered = False
 
     def dimmer_screen(self, dt):
-        ScreenManager.set_brightness(25)
+        ScreenManager.set_brightness(15)
         self.screen_dimmered = True
 
     def turn_screen_off(self, dt):
