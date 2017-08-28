@@ -34,7 +34,8 @@ $ sudo reboot
 * (Optional) [Enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/).
 * Update package index and install dependencies.
 ```
-$ sudo apt-get update; sudo apt-get install git python-setuptools python-pip
+$ sudo apt-get update; sudo apt-get install git python-setuptools
+$ sudo easy_install -U pip
 ```
 * Clone app repo.
 ```
