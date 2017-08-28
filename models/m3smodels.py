@@ -2,7 +2,7 @@ import urllib
 
 
 def quote_url(jo, attr):
-    return urllib.quote(jo[attr], safe=':/') if jo[attr] else None
+    return urllib.quote(jo[attr], safe=':/?=') if jo[attr] else None
 
 
 class MusicCategory(object):
