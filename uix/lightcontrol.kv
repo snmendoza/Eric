@@ -1,8 +1,12 @@
+#:import Window kivy.core.window.Window
+
 <OnOff>:
         on_release: self.set_bright()
 
 <LightControl>:
         orientation: 'vertical'
+        size_hint_y: None
+        height: Window.height * .2
         Label:
                 id: name
         AnchorLayout:

@@ -20,11 +20,6 @@ class LightControl(BoxLayout):
     def __init__(self, **kwargs):
         super(LightControl, self).__init__(**kwargs)
         self.register_event_type('on_set_bright')
-        self.control = None
-
-    def on_light(self, instance, value):
-        if self.control:
-            self.ids.control_layout.remove_widget(self.control)
         self.ids.name.text = self.light.name
         self.control = \
             Dimmer() if self.light.type == Light.Types.dimmer else OnOff()

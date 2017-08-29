@@ -10,6 +10,7 @@ from models.ac import AC
 import os
 from threading import Timer
 from uix.mytabbedpanel import MyTabbedPanelItem
+from uix.lightcontrol import LightControl
 from uix.scenecontrol import SceneControl
 
 path = os.path.dirname(os.path.realpath(__file__))
@@ -38,10 +39,11 @@ class LightsAC(MyTabbedPanelItem):
         # dimmers go before on off lights
         self.lights = \
             sorted(Status.lights, key=lambda light: light.type.value)
-        self.ids.lights_rv.data = \
-            map(lambda light:
-                {'light': light, 'on_set_bright': self.start_update_timer},
-                self.lights)
+        self.ids.light_controls_layout.clear_widgets()
+        for light in self.lights:
+            light_control = LightControl(
+                light=light, on_set_bright=self.start_update_timer)
+            self.ids.light_controls_layout.add_widget(light_control)
         self.update_controls()
         if Config.config_mode:
             if not self.scene_control:
@@ -58,7 +60,7 @@ class LightsAC(MyTabbedPanelItem):
 
     def update_controls(self):
         if self.can_update:
-            for light_control in self.ids.lights_rv.layout_manager.children:
+            for light_control in self.ids.light_controls_layout.children:
                 light_control.update_value(
                     Status.lights[light_control.light.number].value)
             self.update_ac_controls()

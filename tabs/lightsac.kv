@@ -7,14 +7,12 @@
                 BoxLayout:
                         id: lights_layout
                         orientation: 'vertical'
-                        RecycleView:
-                                id: lights_rv
-                                viewclass: 'LightControl'
-                                RecycleBoxLayout:
-                                        default_size_hint: 1, None
+                        ScrollView:
+                                BoxLayout:
+                                        id: light_controls_layout
+                                        orientation: 'vertical'
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        orientation: 'vertical'
                 AnchorLayout:
                         size_hint_x: .75
                         BoxLayout:
