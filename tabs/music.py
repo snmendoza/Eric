@@ -36,7 +36,7 @@ class Music(MyTabbedPanelItem):
     def update_categories(self):
         self.ids.categories_rv.data = map(
             lambda category: {
-                'text': category.title,
+                'text': category.title or '',
                 'on_item_selected': self.set_category
             },
             MusicPlayer.categories)
@@ -69,9 +69,9 @@ class Music(MyTabbedPanelItem):
         if self.song:
             self.ids.albumart.source = \
                 self.song.albumart_url or self.DEF_ALBUMART
-            self.ids.artist.text = self.song.artist
-            self.ids.album.text = self.song.album
-            self.ids.title.text = self.song.title
+            self.ids.artist.text = self.song.artist or ''
+            self.ids.album.text = self.song.album or ''
+            self.ids.title.text = self.song.title or ''
         else:
             self.ids.albumart.source = self.DEF_ALBUMART
             self.ids.artist.text = self.DEF_ARTIST
