@@ -26,7 +26,7 @@ class M3SAPI(object):
                                 self.make_request(
                                     'api/get-audio-message',
                                     key=msg.key,
-                                    room=msg.room,
+                                    room=msg.room_number,
                                     suffix=msg.suffix))
 
     def make_request(self, endpoint, **kwargs):

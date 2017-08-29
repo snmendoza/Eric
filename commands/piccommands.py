@@ -38,12 +38,12 @@ class SetAudio(PICCommand):
         super(SetAudio, self).__init__([self.VALUE, playing])
 
 
-class SetAudioMessage(PICCommand):
+class SetAudioMsg(PICCommand):
 
     VALUE = 6
 
     def __init__(self, playing, msg_key):
-        super(SetAudioMessage, self).__init__([self.VALUE, playing, msg_key])
+        super(SetAudioMsg, self).__init__([self.VALUE, playing, msg_key])
 
 
 class RecordLightScene(PICCommand):
