@@ -35,6 +35,15 @@
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
         width: min(Window.width * .1, Window.height * .1)
+<CircularButtonM@ButtonM>:
+        # make background transparent
+        background_color: 0, 0, 0, 0
+        canvas.before:
+                Color:
+                        rgba: hex('#33B5E5')
+                Line:
+                        width: self.width * .025
+                        circle: self.center_x, self.center_y, self.width / 2.
 <OnOff>:
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
