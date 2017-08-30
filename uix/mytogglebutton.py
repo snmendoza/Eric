@@ -4,12 +4,11 @@ from kivy.uix.togglebutton import ToggleButton
 
 class MyToggleButton(ToggleButton):
 
-    background_down_color = ListProperty()
+    background_down_color = ListProperty([1, 1, 1, 1])
 
     def __init__(self, **kwargs):
         super(MyToggleButton, self).__init__(**kwargs)
         self.border = 0, 0, 0, 0
-        self.background_down_color = self.background_color
         self.original_background_color = self.background_color
 
     def set_state(self, down):
@@ -17,7 +16,6 @@ class MyToggleButton(ToggleButton):
 
     def on_state(self, widget, value):
         if value == 'down':
-            print(str(self.background_down_color))
             self.background_color = self.background_down_color
         else:
             # original background is just a list
