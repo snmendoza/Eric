@@ -11,7 +11,7 @@ class MyToggleButton(ToggleButton):
         self.state = 'down' if down else 'normal'
 
     def on_background_normal(self, instance, value):
-        self.background_disable_normal = self.background_normal
+        self.background_disabled_normal = self.background_normal
 
     def on_background_down(self, instance, value):
-        self.background_disable_down = self.background_down
+        self.background_disabled_down = self.background_down
