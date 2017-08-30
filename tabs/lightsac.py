@@ -42,7 +42,8 @@ class LightsAC(MyTabbedPanelItem):
         self.ids.light_controls_layout.clear_widgets()
         for light in self.lights:
             light_control = LightControl(
-                light=light, on_set_bright=self.start_update_timer)
+                light=light)
+            light_control.bind(on_set_bright=self.start_update_timer)
             self.ids.light_controls_layout.add_widget(light_control)
         self.update_controls()
         if Config.config_mode:
@@ -74,7 +75,7 @@ class LightsAC(MyTabbedPanelItem):
     def enable_update(self):
         self.can_update = True
 
-    def start_update_timer(self):
+    def start_update_timer(self, instance):
         self.can_update = False
         if self.update_timer:
             self.update_timer.cancel()

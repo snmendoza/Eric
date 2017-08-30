@@ -1,9 +1,9 @@
 from appconnections import PICConnection
 from appstatus import Status
 from commands import piccommands
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import NumericProperty, ObjectProperty
 from kivy.lang import Builder
+from kivy.properties import NumericProperty, ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
 from models.light import Light
 import os
 from uix.myslider import MySlider
