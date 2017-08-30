@@ -90,7 +90,7 @@ class LightsAC(MyTabbedPanelItem):
             Status.ac.set_status(AC.Status.turning_off.value)
             PICConnection.send_command(piccommands.ACOff())
         self.update_ac_controls()
-        self.start_update_timer()
+        self.start_update_timer(self)
 
     def ac_temp(self, direction):
         if Status.ac.status == AC.Status.on:
@@ -101,4 +101,4 @@ class LightsAC(MyTabbedPanelItem):
             PICConnection.send_command(
                 piccommands.SetACTemp(Status.ac.temp_code))
             self.update_ac_controls()
-            self.start_update_timer()
+            self.start_update_timer(self)
