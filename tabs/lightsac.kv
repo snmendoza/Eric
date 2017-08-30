@@ -28,14 +28,14 @@
                                                 on_release: root.ac_power()
                                 BoxLayout:
                                         ButtonM:
-                                                text: '-'
+                                                background: 'images/minus.png'
                                                 on_release: root.ac_temp('down')
                                         AnchorLayout:
                                                 Label:
                                                         id: ac_temp
                                                         text: '----'
                                         ButtonM:
-                                                text: '+'
+                                                background: 'images/plus.png'
                                                 on_release: root.ac_temp('up')
                                 BoxLayout:
                                         Label:
