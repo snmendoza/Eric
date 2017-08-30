@@ -22,8 +22,12 @@
                                 Label:
                                         text: 'Aire'
                                 AnchorLayout:
+                                        size_hint_y: None
+                                        height: root.ids.ac_power.height
                                         ACPower:
                                                 id: ac_power
+                                                background_normal: 'images/power.png'
+                                                background_down: 'images/power.png'
                                                 on_release: root.ac_power()
                                 BoxLayout:
                                         ButtonM:
