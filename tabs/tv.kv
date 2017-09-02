@@ -4,7 +4,7 @@
         text: 'TV'
         TabContentLayout:
                 AnchorLayout:
-                        BoxLayout:
+                        BorderedBoxLayout:
                                 orientation: 'vertical'
                                 size_hint: None, None
                                 size: self.minimum_width, self.minimum_height
@@ -20,7 +20,7 @@
                                         cols: 2
                                         size_hint: None, None
                                         size: self.minimum_width, self.minimum_height
-                                        spacing: root.width * .125, root.height * .3
+                                        spacing: root.width * .2, root.height * .4
                                         RepeatButtonM:
                                                 on_repeat: root.vol_up()
                                                 background: 'images/plus.png'
@@ -42,7 +42,7 @@
                                                 background: 'images/volume_muted.png'
                                         ButtonM:
                                                 on_release: root.info()
-                                                text: 'Info'
+                                                text: 'INFO'
                                                 # make background transparent
                                                 background_color: 0, 0, 0, 0
                 AnchorLayout:

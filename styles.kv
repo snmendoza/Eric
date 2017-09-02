@@ -27,6 +27,10 @@
 <Image>:
         allow_stretch: True
 
+# use bold font for buttons
+<Button>:
+        bold: True
+
 # define button sizes
 <ButtonM@MyButton>:
         size_hint: None, None
@@ -68,3 +72,12 @@
 
 <MyTabbedPanelItem>:
         bold: True
+
+<BorderedBoxLayout@BoxLayout>:
+        padding: Window.width * .025
+        canvas.before:
+                Color:
+                        rgba: hex('1f667f')
+                Line:
+                        width: Window.width * .001
+                        rounded_rectangle: self.x, self.y, self.width, self.height, Window.width * .01
