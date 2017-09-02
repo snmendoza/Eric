@@ -10,6 +10,10 @@
                         pos: self.pos
                         size: self.size
 
+# change font size
+<Label>:
+        font_size: Window.height * .04
+
 # add padding to tab content
 <TabContentLayout@BoxLayout>:
         padding: self.height * .01
@@ -57,3 +61,5 @@
         width: min(Window.width * .15, Window.height * .15)
         background_down_color: hex('#33B5E5')
 
+<MyTabbedPanelItem>:
+        bold: True

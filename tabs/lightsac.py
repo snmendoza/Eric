@@ -19,8 +19,8 @@ Builder.load_file(os.path.join(path, 'lightsac.kv'))
 
 class LightsAC(MyTabbedPanelItem):
 
-    LIGHTS_TITLE = 'Luces'
-    AC_TITLE = '/Aire'
+    LIGHTS_TITLE = 'LUCES'
+    AC_TITLE = '/AIRE'
 
     def __init__(self, **kwargs):
         super(LightsAC, self).__init__(**kwargs)
