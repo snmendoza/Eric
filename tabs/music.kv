@@ -1,6 +1,7 @@
 #:import MySlider uix.myslider
 #:import SelectableLabel uix.selectablelabel
 #:import SelectableRecycleBoxLayout uix.selectablerecycleboxlayout
+#:import Window kivy.core.window.Window
 
 <Music>:
         text: 'MÚSICA'
@@ -11,6 +12,7 @@
                         SelectableRecycleBoxLayout:
                                 orientation: 'vertical'
                                 default_size_hint: 1, None
+                                default_size: None, Window.height * .15
                                 size_hint_y: None
                                 height: self.minimum_height
                 BoxLayout:
