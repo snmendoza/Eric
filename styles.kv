@@ -23,9 +23,10 @@
         bar_color: 0, 0, 0, 0
         bar_inactive_color: 0, 0, 0, 0
 
-# resize images
+# resize images and disable cache to avoid gpu mem issues
 <Image>:
         allow_stretch: True
+        nocache: True
 
 # use bold font for buttons
 <Button>:
