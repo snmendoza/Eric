@@ -5,6 +5,7 @@ import jobs
 from players.baseplayer import BasePlayer
 from commands import piccommands
 import random
+from threading import Timer
 
 
 class MusicPlayer(BasePlayer):
@@ -14,6 +15,7 @@ class MusicPlayer(BasePlayer):
     songs = []
     song = None
     resume = False
+    set_audio_timer = None
 
     def __init__(self):
         super(MusicPlayer, self).__init__()
@@ -26,11 +28,11 @@ class MusicPlayer(BasePlayer):
     def play(self):
         if self.loaded:
             super(MusicPlayer, self).play()
-            PICConnection.send_command(piccommands.SetAudio(True))
+            self.send_set_audio()
         elif self.song:
             self.set_source(self.song.url)
             super(MusicPlayer, self).play()
-            PICConnection.send_command(piccommands.SetAudio(True))
+            self.send_set_audio()
         elif self.categories:
             self.set_category(self.categories[0])
         Events.on_music_player_update()
@@ -38,13 +40,13 @@ class MusicPlayer(BasePlayer):
     def pause(self):
         super(MusicPlayer, self).pause()
         Events.on_music_player_update()
-        PICConnection.send_command(piccommands.SetAudio(False))
+        self.send_set_audio()
 
     def stop(self):
         super(MusicPlayer, self).stop()
         self.song = None
         Events.on_music_player_update()
-        PICConnection.send_command(piccommands.SetAudio(False))
+        self.send_set_audio()
 
     def set_elapsed(self, seconds):
         super(MusicPlayer, self).set_elapsed(seconds)
@@ -115,3 +117,12 @@ class MusicPlayer(BasePlayer):
     def on_audio_msg_end(self):
         if self.resume:
             self.play()
+
+    def send_set_audio(self):
+        if not self.set_audio_timer:
+            self.set_audio_timer = Timer(1, self.send_set_audio_now)
+            self.set_audio_timer.start()
+
+    def send_set_audio_now(self):
+        PICConnection.send_command(piccommands.SetAudio(self.playing))
+        self.set_audio_timer = None
