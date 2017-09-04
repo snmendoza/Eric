@@ -23,7 +23,7 @@ class PICConnection(BaseConnection):
         switcher = {
             piccommands.Status.VALUE: Events.on_pic_status,
             piccommands.Intro.VALUE: Events.on_pic_intro,
-            piccommands.StartAudioMsg: Events.on_pic_start_audio_msg
+            piccommands.StartAudioMsg.VALUE: Events.on_pic_start_audio_msg
         }
         switcher[command.values[len(PICCommand.START)]](command)
         Logger.debug(__name__ + ': Received ' + str(command.values))
