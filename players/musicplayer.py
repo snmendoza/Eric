@@ -26,13 +26,14 @@ class MusicPlayer(BasePlayer):
     def play(self):
         if self.loaded:
             super(MusicPlayer, self).play()
+            PICConnection.send_command(piccommands.SetAudio(True))
         elif self.song:
             self.set_source(self.song.url)
             super(MusicPlayer, self).play()
+            PICConnection.send_command(piccommands.SetAudio(True))
         elif self.categories:
             self.set_category(self.categories[0])
         Events.on_music_player_update()
-        PICConnection.send_command(piccommands.SetAudio(True))
 
     def pause(self):
         super(MusicPlayer, self).pause()

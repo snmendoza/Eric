@@ -76,16 +76,17 @@ class BaseConnection(object):
         success = False
         self.cancel_keepalive_timer()
         if (self.connected):
-            Logger.debug(__name__ + ': Sending ' + str(data) + ' to ' +
-                         self.address + ':' + str(self.port))
+            Logger.debug(__name__ + ': Sending ' + str([int(d) for d in data])
+                         + ' to ' + self.address + ':' + str(self.port))
             try:
-                self.socket.send(data)
+                self.socket.sendall(data)
                 self.start_keepalive_timer()
                 success = True
             except socket.error as msg:
-                Logger.warning(__name__ + ': Sending ' + str(data) + ' to ' +
-                               self.address + ':' + str(self.port) +
-                               ' failed with error: ' + str(msg))
+                Logger.warning(__name__ + ': Sending '
+                               + str([int(d) for d in data]) + ' to '
+                               + self.address + ':' + str(self.port)
+                               + ' failed with error: ' + str(msg))
                 self.disconnect()
         return success
 
