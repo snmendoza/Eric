@@ -33,6 +33,7 @@ class EricApp(App):
         Window.bind(on_touch_down=self.on_touch_down,
                     on_touch_move=self.on_touch_move,
                     on_touch_up=self.on_touch_up)
+        self.first_touch = None
 
     def on_stop(self):
         self.turn_screen_on()
@@ -97,6 +98,8 @@ class EricApp(App):
         if self.screen_on:
             if self.screen_dimmered:
                 self.turn_screen_on()
+            if not self.first_touch:
+                self.first_touch = touch
             self.cancel_screensaver_timer()
             return False
         else:
@@ -107,7 +110,9 @@ class EricApp(App):
 
     def on_touch_up(self, instance, touch):
         if self.screen_on:
-            self.restart_screensaver_timer()
+            if touch == self.first_touch:
+                self.first_touch = None
+                self.restart_screensaver_timer()
             return False
         else:
             self.turn_screen_on()
