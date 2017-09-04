@@ -59,7 +59,6 @@ class Music(MyTabbedPanelItem):
         except ValueError:
             index = None
         if index is not None:
-            pass
             self.ids.categories_rv.layout_manager.select_node(index)
         else:
             self.ids.categories_rv.layout_manager.clear_selection()

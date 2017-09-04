@@ -77,13 +77,14 @@ class MusicPlayer(BasePlayer):
         elif not self.category or category.id != self.category.id:
             self.category = None
             self.songs = []
-            self.stop()
             for saved_category in self.categories:
                 if saved_category.id == category.id:
                     self.category = category
+                    self.stop()
                     QPool.addJob(jobs.UpdateSongs(self.category))
-        else:
-            self.category = None
+                    break
+            if not self.category:
+                self.stop()
 
     def set_songs(self, category, songs):
         if category.id == self.category.id:
