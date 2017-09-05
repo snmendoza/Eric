@@ -43,6 +43,7 @@ class BaseConnection(object):
             self.socket = socket.socket()
             self.socket.connect((self.address, self.port))
             self.connected = True
+            self.on_connected()
             self.start_keepalive_timer()
             while True:
                 data = self.socket.recv(1024)
@@ -113,3 +114,6 @@ class BaseConnection(object):
 
     def get_keepalive_command(self):
         raise NotImplementedError
+
+    def on_connected(self):
+        pass

@@ -42,7 +42,6 @@ class EricApp(App):
         QPool.addJob(jobs.Connection(PICConnection))
         QPool.addJob(jobs.Connection(SGHConnection))
         self.start_status_update()
-        self.set_tv_remote_code()
         self.set_m3s_host()
 
     def on_config_update(self):
