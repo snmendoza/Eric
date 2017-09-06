@@ -6,15 +6,21 @@ class MyButton(Button):
 
     background = StringProperty('')
     background_down_color = ListProperty([1, 1, 1, 1])
+    down_color = ListProperty([1, 1, 1, 1])
 
     def __init__(self, **kwargs):
         super(MyButton, self).__init__(**kwargs)
         self.border = 0, 0, 0, 0
         self.original_background_color = self.background_color
+        self.original_color = self.color
 
     def on_background_color(self, instance, value):
         if value != self.background_down_color:
             self.original_background_color = value
+
+    def on_color(self, instance, value):
+        if value != self.down_color:
+            self.original_color = value
 
     def on_background(self, instance, value):
         self.background_normal = self.background
@@ -26,6 +32,8 @@ class MyButton(Button):
     def on_state(self, widget, value):
         if value == 'down':
             self.background_color = self.background_down_color
+            self.color = self.down_color
         else:
             # original background is just a list
             self.background_color = self.original_background_color
+            self.color = self.original_color
