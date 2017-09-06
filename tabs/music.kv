@@ -55,11 +55,10 @@
                                         size_hint_y: None
                                         height: self.minimum_height
                                         spacing: self.width * .05
-                                        ToggleButtonM:
+                                        ButtonM:
                                                 id: play_pause
                                                 on_release: root.play_pause()
-                                                background_normal: 'images/play.png'
-                                                background_down: 'images/pause.png'
+                                                background: 'images/play.png'
                                         ButtonM:
                                                 on_release: root.prev()
                                                 background: 'images/prev.png'
@@ -69,11 +68,10 @@
                                         ButtonM:
                                                 on_release: root.next()
                                                 background: 'images/next.png'
-                                        ToggleButtonM:
+                                        ButtonM:
                                                 id: mute_unmute
                                                 on_release: root.mute_unmute()
-                                                background_normal: 'images/volume_high.png'
-                                                background_down: 'images/volume_muted.png'
+                                                background: 'images/volume_high.png'
                                         MySlider:
                                                 id: volume
                                                 on_move: root.set_volume(self.value)

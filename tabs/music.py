@@ -78,7 +78,8 @@ class Music(MyTabbedPanelItem):
             self.ids.title.text = self.DEF_TITLE
 
     def update_player_controls(self):
-        self.ids.play_pause.set_state(MusicPlayer.playing)
+        self.ids.play_pause.background = 'images/pause.png' \
+            if MusicPlayer.playing else 'images/play.png'
         if self.song and self.update_time:
             self.ids.elapsed.text = self.format_time(MusicPlayer.elapsed)
             self.ids.remaining.text = self.format_time(
@@ -96,7 +97,8 @@ class Music(MyTabbedPanelItem):
         self.ids.volume.max = VolumeManager.max
         self.ids.volume.step = VolumeManager.step
         self.ids.volume.value = VolumeManager.volume
-        self.ids.mute_unmute.set_state(VolumeManager.muted)
+        self.ids.mute_unmute.background = 'images/volume_muted.png' \
+            if VolumeManager.muted else 'images/volume_high.png'
 
     def format_time(self, seconds):
         m, s = divmod(seconds, 60)
