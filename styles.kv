@@ -10,9 +10,13 @@
                         pos: self.pos
                         size: self.size
 
-# change font size
+# change font size and shorten text if needed
 <Label>:
         font_size: Window.height * .04
+        shorten: True
+        shorten_from: 'right'
+        text_size: self.width, None
+        halign: 'center'
 
 # add padding to tab content
 <TabContentLayout@BoxLayout>:
