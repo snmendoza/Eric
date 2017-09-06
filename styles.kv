@@ -32,44 +32,55 @@
 <Button>:
         bold: True
 
+<MyButton>:
+        background_down_color: hex('#33B5E5')
+
 # define button sizes
 <ButtonM@MyButton>:
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
         width: min(Window.width * .1, Window.height * .1)
+
 <ButtonL@MyButton>:
         size_hint: None, None
         height: min(Window.width * .15, Window.height * .15)
         width: min(Window.width * .15, Window.height * .15)
+ 
 <RepeatButtonM@RepeatButton>:
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
         width: min(Window.width * .1, Window.height * .1)
+
 <ToggleButtonM@MyToggleButton>:
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
         width: min(Window.width * .1, Window.height * .1)
+
 <CircularButtonM@ButtonM>:
         # make background transparent
         background_color: 0, 0, 0, 0
+        background_down_color: 0, 0, 0, 0
         canvas.before:
                 Color:
                         rgba: hex('#33B5E5')
                 Line:
                         width: self.width * .025
                         circle: self.center_x, self.center_y, self.width / 2.
+
+<MyToggleButton>:
+        background_down_color: hex('#33B5E5')
+        
 <OnOff>:
         size_hint: None, None
         height: min(Window.width * .1, Window.height * .1)
         width: min(Window.width * .1, Window.height * .1)
         background_normal: 'images/power.png'
         background_down: 'images/power.png'
-        background_down_color: hex('#33B5E5')
+
 <ACPower>:
         size_hint: None, None
         height: min(Window.width * .15, Window.height * .15)
         width: min(Window.width * .15, Window.height * .15)
-        background_down_color: hex('#33B5E5')
 
 <MyTabbedPanelItem>:
         bold: True
