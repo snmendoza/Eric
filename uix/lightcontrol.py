@@ -24,6 +24,10 @@ class LightControl(BoxLayout):
         self.control = \
             Dimmer() if self.light.type == Light.Types.dimmer else OnOff()
         self.ids.control_layout.add_widget(self.control)
+        if self.light.type == Light.Types.dimmer:
+            self.size_hint_x = 1
+        elif self.light.type == Light.Types.on_off:
+            self.size_hint_x = 1 / 4.
 
     def update_value(self, value):
         if value == self.control.value:

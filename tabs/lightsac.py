@@ -7,6 +7,7 @@ from appstatus import Status
 from commands import piccommands
 from kivy.lang import Builder
 from models.ac import AC
+from models.light import Light
 import os
 from threading import Timer
 from uix.mytabbedpanel import MyTabbedPanelItem
@@ -36,15 +37,17 @@ class LightsAC(MyTabbedPanelItem):
             self.load_controls()
 
     def load_controls(self):
-        # dimmers go before on off lights
-        self.lights = \
-            sorted(Status.lights, key=lambda light: light.type.value)
-        self.ids.light_controls_layout.clear_widgets()
+        self.lights = Status.lights
+        self.ids.dimmers_layout.clear_widgets()
+        self.ids.on_offs_layout.clear_widgets()
         for light in self.lights:
             light_control = LightControl(
                 light=light)
             light_control.bind(on_set_bright=self.start_update_timer)
-            self.ids.light_controls_layout.add_widget(light_control)
+            if light.type == Light.Types.dimmer:
+                self.ids.dimmers_layout.add_widget(light_control)
+            elif light.type == Light.Types.on_off:
+                self.ids.on_offs_layout.add_widget(light_control)
         self.update_controls()
         if Config.config_mode:
             if not self.scene_control:
@@ -61,7 +64,10 @@ class LightsAC(MyTabbedPanelItem):
 
     def update_controls(self):
         if self.can_update:
-            for light_control in self.ids.light_controls_layout.children:
+            for light_control in self.ids.dimmers_layout.children:
+                light_control.update_value(
+                    Status.lights[light_control.light.number].value)
+            for light_control in self.ids.on_offs_layout.children:
                 light_control.update_value(
                     Status.lights[light_control.light.number].value)
             self.update_ac_controls()

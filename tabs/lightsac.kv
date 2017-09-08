@@ -8,11 +8,23 @@
                         id: lights_layout
                         orientation: 'vertical'
                         ScrollView:
-                                BoxLayout:
-                                        id: light_controls_layout
-                                        orientation: 'vertical'
+                                AnchorLayout:
                                         size_hint_y: None
-                                        height: self.minimum_height
+                                        height: root.ids.light_controls_layout.height
+                                        BoxLayout:
+                                                id: light_controls_layout
+                                                orientation: 'vertical'
+                                                size_hint_y: None
+                                                height: self.minimum_height
+                                                BoxLayout:
+                                                        id: dimmers_layout
+                                                        orientation: 'vertical'
+                                                        size_hint_y: None
+                                                        height: self.minimum_height
+                                                StackLayout:
+                                                        id: on_offs_layout
+                                                        size_hint_y: None
+                                                        height: self.minimum_height
                 AnchorLayout:
                         id: ac_layout
                         size_hint_x: .75
