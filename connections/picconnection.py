@@ -4,7 +4,7 @@ from baseconnection import BaseConnection
 from commands.basecommands import PICCommand
 from commands import piccommands
 from kivy.logger import Logger
-from models.status import Status
+from appstatus import Status
 
 
 class PICConnection(BaseConnection):
@@ -32,11 +32,11 @@ class PICConnection(BaseConnection):
     def on_connected(self):
         super(PICConnection, self).on_connected()
         if Config.ready:
-            PICConnection.send_command(
+            self.send_command(
                 piccommands.SetTVRemoteCode(Config.tv_remote_code),
                 retry=True,
                 period=5)
-            PICConnection.send_command(
+            self.send_command(
                 piccommands.RecordLightTypes(Status.lights),
                 retry=True,
                 period=5)
