@@ -23,7 +23,7 @@ class AudioMsgPlayer(BasePlayer):
         if not self.msg:
             Events.on_audio_msg_start()
             self.saved_volume = VolumeManager.volume
-            VolumeManager.set_volume(VolumeManager.max)
+            VolumeManager.set_volume(VolumeManager.max * .9)
             self.next()
 
     def next(self):
