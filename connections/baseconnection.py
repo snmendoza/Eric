@@ -37,26 +37,28 @@ class BaseConnection(object):
         self.address = address
         self.port = port
         self.disconnect()
-        Logger.info(__name__ + ': Connecting to ' +
-                    self.address + ':' + str(self.port))
-        try:
-            self.socket = socket.socket()
-            self.socket.connect((self.address, self.port))
-            self.connected = True
-            self.on_connected()
-            self.start_keepalive_timer()
-            while True:
-                data = self.socket.recv(1024)
-                if not data:
-                    Logger.warning(__name__ + ': No data received from ' +
-                                   self.address + ':' + str(self.port))
-                    break
-                self.read_data(data)
-            self.disconnect()
-        except socket.error as error:
-            Logger.warning(__name__ + ': Connection to ' + self.address + ':' +
-                           str(self.port) + ' failed with error: ' + str(error))
-            self.disconnect()
+        if self.address and self.port:
+            Logger.info(__name__ + ': Connecting to ' +
+                        self.address + ':' + str(self.port))
+            try:
+                self.socket = socket.socket()
+                self.socket.connect((self.address, self.port))
+                self.connected = True
+                self.on_connected()
+                self.start_keepalive_timer()
+                while True:
+                    data = self.socket.recv(1024)
+                    if not data:
+                        Logger.warning(__name__ + ': No data received from ' +
+                                       self.address + ':' + str(self.port))
+                        break
+                    self.read_data(data)
+                self.disconnect()
+            except socket.error as error:
+                Logger.warning(__name__ + ': Connection to ' + self.address +
+                               ':' + str(self.port) + ' failed with error: ' +
+                               str(error))
+                self.disconnect()
 
     def disconnect(self):
         self.connected = False
