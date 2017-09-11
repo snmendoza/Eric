@@ -1,6 +1,7 @@
 from appconnections import PICConnection
 from appstatus import Status
 from commands import piccommands
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -26,8 +27,10 @@ class LightControl(BoxLayout):
         self.ids.control_layout.add_widget(self.control)
         if self.light.type == Light.Types.dimmer:
             self.size_hint_x = 1
+            self.height = Window.height * .145
         elif self.light.type == Light.Types.on_off:
             self.size_hint_x = 1 / 4.
+            self.height = Window.height * .245
 
     def update_value(self, value):
         if value == self.control.value:
