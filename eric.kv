@@ -1,4 +1,3 @@
-#:import Info tabs.info
 #:import LightsAC tabs.lightsac
 #:import MyTabbedPanel uix.mytabbedpanel
 #:import Music tabs.music
@@ -6,10 +5,10 @@
 
 RelativeLayout:
         MyTabbedPanel:
+                id: tabbed_panel
                 do_default_tab: False
                 tab_width: root.width / len(self.tab_list)
                 tab_height: self.height * .1
                 Music:
                 TV:
                 LightsAC:
-                Info:

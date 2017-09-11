@@ -14,6 +14,7 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.logger import Logger
 import os
+from tabs.info import Info
 
 kivy.require('1.10.0')
 path = os.path.dirname(os.path.realpath(__file__))
@@ -34,6 +35,7 @@ class EricApp(App):
                     on_touch_move=self.on_touch_move,
                     on_touch_up=self.on_touch_up)
         self.first_touch = None
+        self.info_tab = None
 
     def on_stop(self):
         self.turn_screen_on()
@@ -43,10 +45,12 @@ class EricApp(App):
         QPool.addJob(jobs.Connection(SGHConnection))
         self.start_status_update()
         self.set_m3s_host()
+        self.update_tabs()
 
     def on_config_update(self):
         self.set_tv_remote_code()
         self.set_m3s_host()
+        self.update_tabs()
 
     def start_status_update(self):
         PICConnection.send_command(
@@ -67,6 +71,22 @@ class EricApp(App):
             piccommands.RecordLightTypes(Status.lights),
             retry=True,
             period=5)
+
+    def update_tabs(self):
+        if Config.full_version:
+            if not self.info_tab:
+                self.info_tab = Info()
+                self.root.ids.tabbed_panel.add_widget(self.info_tab)
+        else:
+            if self.info_tab:
+                self.root.ids.tabbed_panel.remove_widget(self.info_tab)
+                self.info_tab = None
+        tab_list = self.root.ids.tabbed_panel.tab_list
+        self.root.ids.tabbed_panel.tab_width = self.root.width / len(tab_list)
+        # Go to first tab if selected tab was removed
+        if self.root.ids.tabbed_panel.current_tab not in tab_list:
+            self.root.ids.tabbed_panel.switch_to(
+                self.root.ids.tabbed_panel.default_tab)
 
     def turn_screen_on(self):
         ScreenManager.set_power(True)
