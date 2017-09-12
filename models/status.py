@@ -1,6 +1,6 @@
 from appconfig import Config
 from appevents import Events
-from datetime import date, time
+from datetime import date, datetime, time
 from models.ac import AC
 
 
@@ -41,12 +41,12 @@ class Status(object):
         Events.on_status_update()
 
     def update_status_from_command(self, command):
-        self.date = command[1:7]
-        self.time = command[7:11]
+        self.date = datetime.strptime(command[1:7], '%d%m%y').date()
+        self.time = datetime.strptime(command[7:11], '%H%M').time()
         self.service_open = bool(command[11])
-        self.shift_start = command[12:16]
-        self.shift_end = command[16:20]
-        self.alarm = command[20:24]
+        self.shift_start = datetime.strptime(command[12:16], '%H%M').time()
+        self.shift_end = datetime.strptime(command[16:20], '%H%M').time()
+        self.alarm = datetime.strptime(command[20:24], '%H%M').time()
         self.lodging = command[24:30]
         self.surcharge = command[30:36]
         self.bar = command[36:42]
