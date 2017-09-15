@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from appconfig import Config
-from appconnections import PICConnection
 from appevents import Events
 from appstatus import Status
-from commands import piccommands
 from kivy.lang import Builder
-from models.ac import AC
 from models.light import Light
 import os
 from threading import Timer
@@ -57,10 +54,6 @@ class LightsAC(MyTabbedPanelItem):
             if self.scene_control:
                 self.ids.lights_layout.remove_widget(self.scene_control)
                 self.scene_control = None
-        # hide ac controls if needed
-        self.ids.ac_layout.size_hint_x = .75 if Config.ac_controls else 0
-        self.text = self.LIGHTS_TITLE + self.AC_TITLE \
-            if Config.ac_controls else self.LIGHTS_TITLE
 
     def update_controls(self):
         if self.can_update:
@@ -70,13 +63,6 @@ class LightsAC(MyTabbedPanelItem):
             for light_control in self.ids.on_offs_layout.children:
                 light_control.update_value(
                     Status.lights[light_control.light.number].value)
-            self.update_ac_controls()
-
-    def update_ac_controls(self):
-        self.ids.ac_power.update_status(Status.ac.status)
-        self.ids.ac_temp.text = str(Status.ac.temp) + '°C'
-        self.ids.ac_status.text = Status.ac.status_label
-        self.ids.ac_mode.text = Status.ac.mode
 
     def enable_update(self):
         self.can_update = True
@@ -87,24 +73,3 @@ class LightsAC(MyTabbedPanelItem):
             self.update_timer.cancel()
         self.update_timer = Timer(5, self.enable_update)
         self.update_timer.start()
-
-    def ac_power(self):
-        if Status.ac.status == AC.Status.off:
-            Status.ac.set_status(AC.Status.turning_on.value)
-            PICConnection.send_command(piccommands.ACOn(Status.ac.temp_code))
-        elif Status.ac.status == AC.Status.on:
-            Status.ac.set_status(AC.Status.turning_off.value)
-            PICConnection.send_command(piccommands.ACOff())
-        self.update_ac_controls()
-        self.start_update_timer(self)
-
-    def ac_temp(self, direction):
-        if Status.ac.status == AC.Status.on:
-            {
-                'up': Status.ac.temp_up,
-                'down': Status.ac.temp_down
-            }[direction]()
-            PICConnection.send_command(
-                piccommands.SetACTemp(Status.ac.temp_code))
-            self.update_ac_controls()
-            self.start_update_timer(self)
