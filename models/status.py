@@ -40,7 +40,7 @@ class Status(object):
         map(lambda light: light.update_from_command(command), self.lights)
         Events.on_status_update()
 
-    def update_status_from_command(self, command):
+    def update_account_from_command(self, command):
         self.date = datetime.strptime(command[1:7], '%d%m%y').date()
         self.time = datetime.strptime(command[7:11], '%H%M').time()
         self.service_open = bool(command[11])
