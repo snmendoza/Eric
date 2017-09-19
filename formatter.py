@@ -1,8 +1,9 @@
+from babel.dates import format_date, format_time
 from money import Money
 
 
 def as_date(date):
-    return date.strftime('%d %B, %Y')
+    return format_date(date, format='long', locale='es_AR')
 
 
 def as_time(time):
