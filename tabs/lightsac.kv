@@ -4,6 +4,7 @@
 <LightsAC>:
         text: self.LIGHTS_TITLE + self.AC_TITLE
         TabContentLayout:
+                id: content_layout
                 BoxLayout:
                         id: lights_layout
                         orientation: 'vertical'
@@ -22,3 +23,42 @@
                                                 id: on_offs_layout
                                                 size_hint_y: None
                                                 height: self.minimum_height
+                AnchorLayout:
+                        id: ac_layout
+                        size_hint_x: .75
+                        BorderedBoxLayout:
+                                orientation: 'vertical'
+                                size_hint: .75, .75
+                                Label:
+                                        text: 'Aire'
+                                AnchorLayout:
+                                        size_hint_y: None
+                                        height: root.ids.ac_power.height
+                                        ACPower:
+                                                id: ac_power
+                                                background_normal: 'images/power.png'
+                                                background_down: 'images/power.png'
+                                                on_release: root.ac_power()
+                                BoxLayout:
+                                        ButtonM:
+                                                background: 'images/minus.png'
+                                                on_release: root.ac_temp('down')
+                                        AnchorLayout:
+                                                Label:
+                                                        id: ac_temp
+                                                        text: '----'
+                                        ButtonM:
+                                                background: 'images/plus.png'
+                                                on_release: root.ac_temp('up')
+                                BoxLayout:
+                                        Label:
+                                                text: 'Estado:'
+                                        Label:
+                                                id: ac_status
+                                                text: '----'
+                                BoxLayout:
+                                        Label:
+                                                text: 'Modo:'
+                                        Label:
+                                                id: ac_mode
+                                                text: '----'
