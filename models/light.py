@@ -32,7 +32,7 @@ class Light(object):
             self.value = 100
         else:
             if self.type == self.Types.on_off and 0 < value < 100:
-                Logger.warning(__name__ + ': Type ' + self.type +
+                Logger.warning(__name__ + ': Type ' + str(self.type) +
                                ' only takes values of 0 or 100')
                 value = 0
             self.value = int(round(value))
