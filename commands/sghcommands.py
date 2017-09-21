@@ -29,7 +29,7 @@ class GetAccountInfo(SGHCommand):
     VALUE = 5
 
     def __init__(self):
-        super(GetAccountInfo, self).__init_([self.VALUE])
+        super(GetAccountInfo, self).__init__([self.VALUE])
 
 
 class AccountInfo(SGHCommand):

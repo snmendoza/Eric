@@ -1,4 +1,4 @@
-from babel.dates import format_date, format_time
+from babel.dates import format_date
 from money import Money
 
 
@@ -7,7 +7,7 @@ def as_date(date):
 
 
 def as_time(time):
-    return time.strftime('%M:%H')
+    return time.strftime('%H:%M')
 
 
 def as_money(value):

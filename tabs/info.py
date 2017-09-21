@@ -1,6 +1,9 @@
+from appconnections import SGHConnection
 from appevents import Events
 from appstatus import Status
+from commands import sghcommands
 import formatter
+from appqpool import QPool
 from kivy.lang import Builder
 import os
 from uix.mytabbedpanel import MyTabbedPanelItem
@@ -18,28 +21,42 @@ class Info(MyTabbedPanelItem):
         super(Info, self).__init__(**kwargs)
         Events.on_account_update += self.update
 
+    def on_selected(self):
+        SGHConnection.send_command(sghcommands.GetAccountInfo(),
+                                   periodic=True,
+                                   period=5)
+
+    def on_unselected(self):
+        print(sghcommands.GetAccountInfo.__name__)
+        QPool.cancelJobs(sghcommands.GetAccountInfo.__name__)
+
     def update(self):
-        self.ids.date = formatter.as_date(Status.date)
-        self.ids.time = formatter.as_time(Status.time)
+        self.ids.date.text = formatter.as_date(Status.date)
+        self.ids.time.text = formatter.as_time(Status.time)
         if Status.service_open:
-            self.ids.shift_start = formatter.as_time(Status.shift_start)
-            self.ids.shift_end = formatter.as_time(Status.shift_end)
-            self.ids.alarm = formatter.as_time(Status.alarm)
-            self.ids.lodging = formatter.as_money(Status.lodging)
-            self.ids.surcharge = formatter.as_money(Status.surcharge)
-            self.ids.bar = formatter.as_money(Status.bar)
-            self.ids.bonus = formatter.as_money(Status.bonus)
-            self.ids.paid = formatter.as_money(Status.paid)
-            self.ids.total = formatter.as_money(Status.total)
-            self.ids.special_offer = Status.special_offer
+            self.ids.shift_start.text = formatter.as_time(Status.shift_start) \
+                if Status.shift_start else self.DEFAULT_TIME
+            self.ids.shift_end.text = formatter.as_time(Status.shift_end) \
+                if Status.shift_end else self.DEFAULT_TIME
+            self.ids.alarm.text = formatter.as_time(Status.alarm) \
+                if Status.alarm else self.DEFAULT_TIME
+            self.ids.lodging.text = formatter.as_money(Status.lodging)
+            self.ids.surcharge.text = formatter.as_money(Status.surcharge)
+            self.ids.bar.text = formatter.as_money(Status.bar)
+            self.ids.bonus.text = formatter.as_money(Status.bonus)
+            self.ids.discount.text = formatter.as_money(Status.discount)
+            self.ids.paid.text = formatter.as_money(Status.paid)
+            self.ids.total.text = formatter.as_money(Status.total)
+            self.ids.special_offer.text = Status.special_offer
         else:
-            self.ids.shift_start = self.DEFAULT_TIME
-            self.ids.shift_end = self.DEFAULT_TIME
-            self.ids.alarm = self.DEFAULT_TIME
-            self.ids.lodging = formatter.as_money(0)
-            self.ids.surcharge = formatter.as_money(0)
-            self.ids.bar = formatter.as_money(0)
-            self.ids.bonus = formatter.as_money(0)
-            self.ids.paid = formatter.as_money(0)
-            self.ids.total = formatter.as_money(0)
-            self.ids.special_offer = self.DEFAULT_TEXT
+            self.ids.shift_start.text = self.DEFAULT_TIME
+            self.ids.shift_end.text = self.DEFAULT_TIME
+            self.ids.alarm.text = self.DEFAULT_TIME
+            self.ids.lodging.text = formatter.as_money(0)
+            self.ids.surcharge.text = formatter.as_money(0)
+            self.ids.bar.text = formatter.as_money(0)
+            self.ids.bonus.text = formatter.as_money(0)
+            self.ids.discount.text = formatter.as_money(0)
+            self.ids.paid.text = formatter.as_money(0)
+            self.ids.total.text = formatter.as_money(0)
+            self.ids.special_offer.text = self.DEFAULT_TEXT

@@ -41,18 +41,39 @@ class Status(object):
         Events.on_status_update()
 
     def update_account_from_command(self, command):
-        self.date = datetime.strptime(command[1:7], '%d%m%y').date()
-        self.time = datetime.strptime(command[7:11], '%H%M').time()
-        self.service_open = bool(command[11])
-        self.shift_start = datetime.strptime(command[12:16], '%H%M').time()
-        self.shift_end = datetime.strptime(command[16:20], '%H%M').time()
-        self.alarm = datetime.strptime(command[20:24], '%H%M').time()
-        self.lodging = command[24:30]
-        self.surcharge = command[30:36]
-        self.bar = command[36:42]
-        self.bonus = command[42:48]
-        self.discount = command[48:54]
-        self.paid = command[54:60]
-        self.total = command[60:66]
-        self.special_offer = command[66:96]
+        self.date = self.get_date(command.params[1:7])
+        self.time = self.get_time(command.params[7:11])
+        self.service_open = bool(command.params[11])
+        self.shift_start = self.get_time(command.params[12:16])
+        self.shift_end = self.get_time(command.params[16:20])
+        self.alarm = self.get_time(command.params[20:24])
+        self.lodging = self.get_int(command.params[24:30])
+        self.surcharge = self.get_int(command.params[30:36])
+        self.bar = self.get_int(command.params[36:42])
+        self.bonus = self.get_int(command.params[42:48])
+        self.discount = self.get_int(command.params[48:54])
+        self.paid = self.get_int(command.params[54:60])
+        self.total = self.get_int(command.params[60:66])
+        self.special_offer = self.get_str(command.params[66:96])
         Events.on_account_update()
+
+    def get_date(self, params):
+        try:
+            return datetime.strptime(self.get_str(params), '%d%m%y').date()
+        except:
+            return None
+
+    def get_time(self, params):
+        try:
+            return datetime.strptime(self.get_str(params), '%H%M').time()
+        except:
+            return None
+
+    def get_str(self, params):
+        return ''.join(map(lambda val: chr(val), params))
+
+    def get_int(self, params):
+        try:
+            return int(self.get_str(params))
+        except:
+            return 0
