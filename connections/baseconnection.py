@@ -42,7 +42,9 @@ class BaseConnection(object):
                         self.address + ':' + str(self.port))
             try:
                 self.socket = socket.socket()
+                self.socket.settimeout(5)
                 self.socket.connect((self.address, self.port))
+                self.socket.settimeout(None)
                 self.connected = True
                 self.on_connected()
                 self.start_keepalive_timer()
