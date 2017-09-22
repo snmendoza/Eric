@@ -15,7 +15,7 @@ Builder.load_file(os.path.join(path, 'info.kv'))
 class Info(MyTabbedPanelItem):
 
     DEFAULT_TIME = '--:--'
-    DEFAULT_TEXT = '----'
+    DEFAULT_TEXT = '-----'
 
     def __init__(self, **kwargs):
         super(Info, self).__init__(**kwargs)
@@ -25,6 +25,7 @@ class Info(MyTabbedPanelItem):
         SGHConnection.send_command(sghcommands.GetAccountInfo(),
                                    periodic=True,
                                    period=5)
+        Events.on_account_update()
 
     def on_unselected(self):
         print(sghcommands.GetAccountInfo.__name__)
@@ -47,7 +48,7 @@ class Info(MyTabbedPanelItem):
             self.ids.discount.text = formatter.as_money(Status.discount)
             self.ids.paid.text = formatter.as_money(Status.paid)
             self.ids.total.text = formatter.as_money(Status.total)
-            self.ids.special_offer.text = Status.special_offer
+            self.ids.special_offer.text = Status.special_offer.strip()
         else:
             self.ids.shift_start.text = self.DEFAULT_TIME
             self.ids.shift_end.text = self.DEFAULT_TIME

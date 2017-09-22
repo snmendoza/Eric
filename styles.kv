@@ -18,6 +18,17 @@
         text_size: self.width, None
         halign: 'center'
 
+# Info tab labels
+<InfoLeftLabel@Label>:
+        size: self.texture_size
+        shorten: False
+        size_hint_x: None
+        text_size: None, None
+        halign: 'left'
+
+<InfoRightLabel@Label>:
+        halign: 'right'
+
 # add padding to tab content
 <TabContentLayout@BoxLayout>:
         padding: self.width * .03, self.height * .01

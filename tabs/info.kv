@@ -1,66 +1,82 @@
+#:import Window kivy.core.window.Window
+
 <Info>:
         text: 'Info'
         TabContentLayout:
+                spacing: self.width * .05
                 BoxLayout:
                         orientation: 'vertical'
-                        Label:
-                                id: date
-                        Label:
-                                id: time
-                        BoxLayout:
-                                Label:
-                                        text: 'Promoción'
-                                Label:
-                                        id: special_offer
-                        BoxLayout:
-                                Label:
-                                        text: 'Ingreso'
-                                Label:
-                                        id: shift_start
-                        BoxLayout:
-                                Label:
-                                        text: 'Fin de turno'
-                                Label:
-                                        id: shift_end
-                        BoxLayout:
-                                Label:
-                                        text: 'Despertador'
-                                Label:
-                                        id: alarm
-                BoxLayout:
+                        AnchorLayout:
+                                anchor_y: 'bottom'
+                                BoxLayout:
+                                        size_hint_y: None
+                                        orientation: 'vertical'
+                                        padding: 0, Window.height * .12
+                                        spacing: Window.height * .125
+                                        InfoLeftLabel:
+                                                id: date
+                                                padding_x: Window.height * .0125
+                                        InfoLeftLabel:
+                                                id: time
+                                                bold: True
+                                                font_size: Window.height * .2
+                        BorderedBoxLayout:
+                                orientation: 'vertical'
+                                size_hint_y: 1.6
+                                BoxLayout:
+                                        InfoLeftLabel:
+                                                text: 'Promoción'
+                                        InfoRightLabel:
+                                                id: special_offer
+                                BoxLayout:
+                                        InfoLeftLabel:
+                                                text: 'Ingreso'
+                                        InfoRightLabel:
+                                                id: shift_start
+                                BoxLayout:
+                                        InfoLeftLabel:
+                                                text: 'Fin de turno'
+                                        InfoRightLabel:
+                                                id: shift_end
+                                BoxLayout:
+                                        InfoLeftLabel:
+                                                text: 'Despertador'
+                                        InfoRightLabel:
+                                                id: alarm
+                BorderedBoxLayout:
                         orientation: 'vertical'
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Alojamiento'
-                                Label:
+                                InfoRightLabel:
                                         id: lodging
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Recargos/Pernocte'
-                                Label:
+                                InfoRightLabel:
                                         id: surcharge
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Bar'
-                                Label:
+                                InfoRightLabel:
                                         id: bar
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Bonificaciones'
-                                Label:
+                                InfoRightLabel:
                                         id: bonus
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Descuentos'
-                                Label:
+                                InfoRightLabel:
                                         id: discount
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Pagado a cuenta'
-                                Label:
+                                InfoRightLabel:
                                         id: paid
                         BoxLayout:
-                                Label:
+                                InfoLeftLabel:
                                         text: 'Total'
-                                Label:
+                                InfoRightLabel:
                                         id: total

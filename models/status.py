@@ -10,7 +10,7 @@ class Status(object):
         self.ac = AC()
         self.lights = []
         self.date = date.today()
-        self.time = time()
+        self.time = datetime.now().time()
         self.service_open = False
         self.shift_start = None
         self.shift_end = None
